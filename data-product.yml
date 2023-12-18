@@ -6,6 +6,33 @@ metadata:
   - schema:
 description:
 input_ports:
+  - id: berlin-building-completion-2022-00
+    metadata:
+      name: Baufertigstellungen, Bauüberhang und Bauabgang in Berlin 2022
+      author: Amt für Statistik Berlin-Brandenburg
+      url: https://www.statistik-berlin-brandenburg.de/f-ii-2-j
+      license: CC-BY-3.0-Namensnennung
+      updated: 2023-06-09
+    files:
+      - https://download.statistik-berlin-brandenburg.de/2bd07d614def86bb/6dba9f3eaa0a/SB_F02-02-00_2022j01_BE.xlsx
+  - id: berlin-building-completion-2021-00
+    metadata:
+      name: Baufertigstellungen, Bauüberhang und Bauabgang in Berlin 2021
+      author: Amt für Statistik Berlin-Brandenburg
+      url: https://www.statistik-berlin-brandenburg.de/f-ii-2-j
+      license: CC-BY-3.0-Namensnennung
+      updated: 2022-06-09
+    files:
+      - https://download.statistik-berlin-brandenburg.de/d712acdbe5af5c59/885f96bb0c20/SB_F02-02-00_2021j01_BE.xlsx
+  - id: berlin-building-completion-2020-00
+    metadata:
+      name: Baufertigstellungen, Bauüberhang und Bauabgang in Berlin 2020
+      author: Amt für Statistik Berlin-Brandenburg
+      url: https://www.statistik-berlin-brandenburg.de/f-ii-2-j
+      license: CC-BY-3.0-Namensnennung
+      updated: 2021-06-09
+    files:
+      - https://download.statistik-berlin-brandenburg.de/629351f64cf37f48/60bed0ed87bb/SB_F02-02-00_2020j01_BE.xlsx
 output_ports:
 metrics:
   - quality:
