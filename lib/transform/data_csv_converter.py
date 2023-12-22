@@ -24,6 +24,7 @@ def convert_data_to_csv(source_path, results_path, clean=False, quiet=False):
             convert_file_to_csv_by_primary_heating_energy(source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_by_secondary_heating_energy(source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_by_primary_water_heating_energy(source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_by_secondary_water_heating_energy(source_file_path, clean=clean, quiet=quiet)
 
 
 def convert_file_to_csv(source_file_path, clean=False, quiet=False):
@@ -278,7 +279,7 @@ def convert_file_to_csv_by_primary_heating_energy(source_file_path, clean=False,
 
             dataframe.reset_index(drop=True, inplace=True)
             dataframe = dataframe.assign(type_index=lambda df: df.index) \
-                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_6_7_8(row), axis=1)) \
+                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_6_7_8_9(row), axis=1)) \
                 .fillna(-1) \
                 .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
             dataframe.insert(0, "type_index", dataframe.pop("type_index"))
@@ -330,7 +331,7 @@ def convert_file_to_csv_by_secondary_heating_energy(source_file_path, clean=Fals
 
             dataframe.reset_index(drop=True, inplace=True)
             dataframe = dataframe.assign(type_index=lambda df: df.index) \
-                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_6_7_8(row), axis=1)) \
+                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_6_7_8_9(row), axis=1)) \
                 .fillna(-1) \
                 .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
             dataframe.insert(0, "type_index", dataframe.pop("type_index"))
@@ -382,7 +383,7 @@ def convert_file_to_csv_by_primary_water_heating_energy(source_file_path, clean=
 
             dataframe.reset_index(drop=True, inplace=True)
             dataframe = dataframe.assign(type_index=lambda df: df.index) \
-                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_6_7_8(row), axis=1)) \
+                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_6_7_8_9(row), axis=1)) \
                 .fillna(-1) \
                 .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
             dataframe.insert(0, "type_index", dataframe.pop("type_index"))
@@ -401,6 +402,59 @@ def convert_file_to_csv_by_primary_water_heating_energy(source_file_path, clean=
             print(f"✗️ Exception: {str(e)}")
     elif not quiet:
         print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+
+
+def convert_file_to_csv_by_secondary_water_heating_energy(source_file_path, clean=False, quiet=False):
+    source_file_name, source_file_extension = os.path.splitext(source_file_path)
+    file_path_csv = f"{source_file_name}-9-by-secondary-water-heating-energy.csv"
+
+    # Check if result needs to be generated
+    if clean or not os.path.exists(file_path_csv):
+        # Determine engine
+        if source_file_extension == ".xlsx":
+            engine = "openpyxl"
+        elif source_file_extension == ".xls":
+            engine = None
+        else:
+            return
+
+        try:
+            sheet = "Baufert. Tab. 9 "
+            skiprows = 6
+            names = ["id", "type", "buildings", "oil", "gas", "electricity", "district_heating", "geothermal_energy",
+                     "environmental_thermal_energy", "solar_thermal_energy", "wood", "biogas_bio_methane",
+                     "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
+            drop_columns = ["id"]
+
+            dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                      usecols=list(range(0, len(names))), names=names) \
+                .drop(columns=drop_columns, errors="ignore") \
+                .dropna() \
+                .replace("–", 0) \
+                .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+
+            dataframe.reset_index(drop=True, inplace=True)
+            dataframe = dataframe.assign(type_index=lambda df: df.index) \
+                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_6_7_8_9(row), axis=1)) \
+                .fillna(-1) \
+                .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
+            dataframe.insert(0, "type_index", dataframe.pop("type_index"))
+            dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+
+            # Write csv file
+            if dataframe.shape[0] > 0:
+                dataframe.to_csv(file_path_csv, index=False)
+            if not quiet:
+                print(f"✓ Convert {os.path.basename(file_path_csv)}")
+            else:
+                if not quiet:
+                    print(dataframe.head())
+                    print(f"✗️ Empty {os.path.basename(file_path_csv)}")
+        except Exception as e:
+            print(f"✗️ Exception: {str(e)}")
+    elif not quiet:
+        print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+
 
 def build_type_index(row):
     return row.name
@@ -710,7 +764,7 @@ def build_type_parent_index_5(row):
         return None
 
 
-def build_type_parent_index_6_7_8(row):
+def build_type_parent_index_6_7_8_9(row):
     row_index = row.name
 
     if row_index == 0:
