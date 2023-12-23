@@ -25,6 +25,7 @@ def convert_data_to_csv(source_path, results_path, clean=False, quiet=False):
             convert_file_to_csv_by_secondary_heating_energy(source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_by_primary_water_heating_energy(source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_by_secondary_water_heating_energy(source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_by_type_and_predominant_building_material(source_file_path, clean=clean, quiet=quiet)
 
 
 def convert_file_to_csv(source_file_path, clean=False, quiet=False):
@@ -456,6 +457,57 @@ def convert_file_to_csv_by_secondary_water_heating_energy(source_file_path, clea
         print(f"✓ Already exists {os.path.basename(file_path_csv)}")
 
 
+def convert_file_to_csv_by_type_and_predominant_building_material(source_file_path, clean=False, quiet=False):
+    source_file_name, source_file_extension = os.path.splitext(source_file_path)
+    file_path_csv = f"{source_file_name}-10-by-type-and-predominant-building-material.csv"
+
+    # Check if result needs to be generated
+    if clean or not os.path.exists(file_path_csv):
+        # Determine engine
+        if source_file_extension == ".xlsx":
+            engine = "openpyxl"
+        elif source_file_extension == ".xls":
+            engine = None
+        else:
+            return
+
+        try:
+            sheet = "Baufert. Tab. 10"
+            skiprows = 7
+            names = ["type", "unit", "buildings", "steel", "reinforced_concrete", "bricks", "sand_lime_bricks",
+                     "aerated_concrete", "light_concrete", "wood", "other"]
+            drop_columns = ["unit"]
+
+            dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                      usecols=list(range(0, len(names))), names=names) \
+                .drop(columns=drop_columns, errors="ignore") \
+                .dropna() \
+                .replace("–", 0) \
+                .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+
+            dataframe.reset_index(drop=True, inplace=True)
+            dataframe = dataframe.assign(type_index=lambda df: df.index) \
+                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_10(row), axis=1)) \
+                .fillna(-1) \
+                .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
+            dataframe.insert(0, "type_index", dataframe.pop("type_index"))
+            dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+
+            # Write csv file
+            if dataframe.shape[0] > 0:
+                dataframe.to_csv(file_path_csv, index=False)
+            if not quiet:
+                print(f"✓ Convert {os.path.basename(file_path_csv)}")
+            else:
+                if not quiet:
+                    print(dataframe.head())
+                    print(f"✗️ Empty {os.path.basename(file_path_csv)}")
+        except Exception as e:
+            print(f"✗️ Exception: {str(e)}")
+    elif not quiet:
+        print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+
+
 def build_type_index(row):
     return row.name
 
@@ -472,17 +524,17 @@ def build_type_name(value):
         return "residential_buildings"
     elif value == "Wohnheime":
         return "dormitories"
-    elif value == "Wohngebäude mit Eigentumswohnungen":
+    elif value == "Wohngebäude mit Eigentumswohnungen" or value == "Wohngeb. m. Eigentumswohn.":
         return "residential_buildings_with_condominium"
     elif value == "Wohngebäude mit 1 Wohnung":
         return "residential_buildings_with_1_apartment"
     elif value == "Wohngebäude mit 2 Wohnungen":
         return "residential_buildings_with_2_apartments"
-    elif value == "Wohngebäude mit 3 o. m. Wohnungen":
+    elif value == "Wohngebäude mit 3 o. m. Wohnungen" or value == "Wohngeb. mit 3 o. m. Wohnungen":
         return "residential_buildings_with_3_or_more_apartments"
     elif value == "darin: Wohnungen":
         return "apartments"
-    elif value == "darin: Rauminhalt 1 000 m³":
+    elif value == "darin: Rauminhalt 1 000 m³" or value == "Rauminhalt" or value == "darin: Rauminhalt 1000 m³":
         return "volume_1000_m3"
     elif value == "landwirtschaftliche Betriebsgebäude":
         return "agricultural_buildings"
@@ -499,9 +551,9 @@ def build_type_name(value):
         return "institution_buildings"
     elif value == "Büro- und Verwaltungsgebäude":
         return "office_and_administration_buildings"
-    elif value == "Landwirtschaftliche Betriebsgebäude":
+    elif value == "Landwirtschaftliche Betriebsgebäude" or value == "landwirtschaftl. Betriebsgebäude":
         return "algricultural_buildings"
-    elif value == "Nichtlandwirtschaftliche Betriebsgebäude":
+    elif value == "Nichtlandwirtschaftliche Betriebsgebäude" or value == "nichtlandwirtschaftl. Betriebsgeb.":
         return "non_algricultural_buildings"
     elif value == "Fabrik- und Werkstattgebäude":
         return "factory_and_workshop_buildings"
@@ -831,5 +883,80 @@ def build_type_parent_index_6_7_8_9(row):
         return 10
     elif row_index == 31:
         return 30
+    else:
+        return None
+
+
+def build_type_parent_index_10(row):
+    row_index = row.name
+
+    if row_index == 0:
+        return -1
+    elif row_index == 1:
+        return 0
+    elif row_index == 2:
+        return 0
+    elif row_index == 3:
+        return 2
+    elif row_index == 4:
+        return 0
+    elif row_index == 5:
+        return 4
+    elif row_index == 6:
+        return 0
+    elif row_index == 7:
+        return 6
+    elif row_index == 8:
+        return -1
+    elif row_index == 9:
+        return -1
+    elif row_index == 10:
+        return 0
+    elif row_index == 11:
+        return 10
+    elif row_index == 12:
+        return -1
+    elif row_index == 13:
+        return 12
+    elif row_index == 14:
+        return 12
+    elif row_index == 15:
+        return 14
+    elif row_index == 16:
+        return 12
+    elif row_index == 17:
+        return 16
+    elif row_index == 18:
+        return 12
+    elif row_index == 19:
+        return 18
+    elif row_index == 20:
+        return 12
+    elif row_index == 21:
+        return 20
+    elif row_index == 22:
+        return 20
+    elif row_index == 23:
+        return 22
+    elif row_index == 24:
+        return 20
+    elif row_index == 25:
+        return 24
+    elif row_index == 26:
+        return 20
+    elif row_index == 27:
+        return 26
+    elif row_index == 28:
+        return 20
+    elif row_index == 29:
+        return 28
+    elif row_index == 30:
+        return 12
+    elif row_index == 31:
+        return 30
+    elif row_index == 32:
+        return 12
+    elif row_index == 33:
+        return 32
     else:
         return None
