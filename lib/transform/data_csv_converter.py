@@ -26,6 +26,7 @@ def convert_data_to_csv(source_path, results_path, clean=False, quiet=False):
             convert_file_to_csv_by_primary_water_heating_energy(source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_by_secondary_water_heating_energy(source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_by_type_and_predominant_building_material(source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_execution_time_by_type_and_contractor(source_file_path, clean=clean, quiet=quiet)
 
 
 def convert_file_to_csv(source_file_path, clean=False, quiet=False):
@@ -508,12 +509,84 @@ def convert_file_to_csv_by_type_and_predominant_building_material(source_file_pa
         print(f"✓ Already exists {os.path.basename(file_path_csv)}")
 
 
+def convert_file_to_csv_execution_time_by_type_and_contractor(source_file_path, clean=False, quiet=False):
+    source_file_name, source_file_extension = os.path.splitext(source_file_path)
+    file_path_csv = f"{source_file_name}-11-execution-time-by-type-and-contractor.csv"
+
+    # Check if result needs to be generated
+    if clean or not os.path.exists(file_path_csv):
+        # Determine engine
+        if source_file_extension == ".xlsx":
+            engine = "openpyxl"
+        elif source_file_extension == ".xls":
+            engine = None
+        else:
+            return
+
+        try:
+            sheet = "Baufert. Tab. 11"
+            skiprows = 8
+            names = ["type", "unit", "total", "execution_time_between_6_12_months",
+                     "execution_time_between_12_18_months", "execution_time_between_18_24_months",
+                     "execution_time_between_24_30_months", "execution_time_between_30_36_months",
+                     "execution_time_above_36_months"]
+            drop_columns = []
+
+            dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                      usecols=list(range(0, len(names))), names=names) \
+                .drop(columns=drop_columns, errors="ignore") \
+                .replace("–", 0) \
+                .fillna(0) \
+                .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
+                .assign(unit=lambda df: df["unit"].apply(lambda row: build_unit_name(row))) \
+                .assign(total=lambda df: df["total"].astype(int)) \
+                .assign(
+                execution_time_between_6_12_months=lambda df: df["execution_time_between_6_12_months"].astype(int)) \
+                .assign(
+                execution_time_between_12_18_months=lambda df: df["execution_time_between_12_18_months"].astype(int)) \
+                .assign(
+                execution_time_between_18_24_months=lambda df: df["execution_time_between_18_24_months"].astype(int)) \
+                .assign(
+                execution_time_between_24_30_months=lambda df: df["execution_time_between_24_30_months"].astype(int)) \
+                .assign(
+                execution_time_between_30_36_months=lambda df: df["execution_time_between_30_36_months"].astype(int)) \
+                .assign(execution_time_above_36_months=lambda df: df["execution_time_above_36_months"].astype(int))
+
+            dataframe = dataframe[dataframe["total"] != 0.0]
+            dataframe = dataframe[dataframe["type"] != "davon"]
+            dataframe = dataframe[dataframe["type"] != "darunter"]
+
+            dataframe["type"] = dataframe["type"].replace("0", pd.NA).fillna(method="ffill")
+
+            dataframe.reset_index(drop=True, inplace=True)
+            dataframe = dataframe.assign(type_index=lambda df: df.index) \
+                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_11(row), axis=1)) \
+                .fillna("") \
+                .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
+            dataframe.insert(0, "type_index", dataframe.pop("type_index"))
+            dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+
+            # Write csv file
+            if dataframe.shape[0] > 0:
+                dataframe.to_csv(file_path_csv, index=False)
+            if not quiet:
+                print(f"✓ Convert {os.path.basename(file_path_csv)}")
+            else:
+                if not quiet:
+                    print(dataframe.head())
+                    print(f"✗️ Empty {os.path.basename(file_path_csv)}")
+        except Exception as e:
+            print(f"✗️ Exception: {str(e)}")
+    elif not quiet:
+        print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+
+
 def build_type_index(row):
     return row.name
 
 
 def build_type_name(value):
-    value = value.lstrip().rstrip()
+    value = str(value).lstrip().rstrip()
 
     if value == "Wohn- und Nichtwohngebäude":
         return "residential_and_non_residential_buildings"
@@ -524,7 +597,7 @@ def build_type_name(value):
         return "residential_buildings"
     elif value == "Wohnheime":
         return "dormitories"
-    elif value == "Wohngebäude mit Eigentumswohnungen" or value == "Wohngeb. m. Eigentumswohn.":
+    elif value == "Wohngebäude mit Eigentumswohnungen" or value == "Wohngeb. m. Eigentumswohn." or value == "Wohngeb. mit Eigentumswohnungen":
         return "residential_buildings_with_condominium"
     elif value == "Wohngebäude mit 1 Wohnung":
         return "residential_buildings_with_1_apartment"
@@ -591,6 +664,17 @@ def build_type_name(value):
 
     else:
         return value
+
+
+def build_unit_name(value):
+    value = str(value).lstrip().rstrip()
+
+    if value == "Gebäude":
+        return "buildings"
+    elif value == "Wohnungen":
+        return "apartments"
+    else:
+        return None
 
 
 def build_type_parent_index_3(row):
@@ -958,5 +1042,64 @@ def build_type_parent_index_10(row):
         return 12
     elif row_index == 33:
         return 32
+    else:
+        return None
+
+
+def build_type_parent_index_11(row):
+    row_index = row.name
+
+    if row_index == 0:
+        return -1
+    elif row_index == 1:
+        return 0
+    elif row_index == 2:
+        return 1
+    elif row_index == 3:
+        return 1
+    elif row_index == 4:
+        return 1
+    elif row_index == 5:
+        return 4
+    elif row_index == 6:
+        return 1
+    elif row_index == 7:
+        return 6
+    elif row_index == 8:
+        return 1
+    elif row_index == 9:
+        return 8
+    elif row_index == 10:
+        return 1
+    elif row_index == 11:
+        return 1
+    elif row_index == 12:
+        return 1
+    elif row_index == 13:
+        return 1
+    elif row_index == 14:
+        return 12
+    elif row_index == 15:
+        return 12
+    elif row_index == 16:
+        return 12
+    elif row_index == 17:
+        return 12
+    elif row_index == 18:
+        return 12
+    elif row_index == 19:
+        return 12
+    elif row_index == 20:
+        return 12
+    elif row_index == 21:
+        return 12
+    elif row_index == 22:
+        return 1
+    elif row_index == 23:
+        return 1
+    elif row_index == 24:
+        return 1
+    elif row_index == 25:
+        return 1
     else:
         return None
