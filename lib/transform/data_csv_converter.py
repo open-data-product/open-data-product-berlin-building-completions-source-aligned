@@ -13,8 +13,11 @@ def convert_data_to_csv(source_path, results_path, clean=False, quiet=False):
         subdir = subdir.replace(f"{source_path}/", "")
         os.makedirs(os.path.join(results_path, subdir), exist_ok=True)
 
-        for file_name in [file_name for file_name in sorted(files) if not file_name.startswith(f"~")]:
+        for file_name in [file_name for file_name in sorted(files)
+                          if not file_name.startswith(f"~") and
+                             (file_name.endswith(".xlsx") or file_name.endswith(".xls"))]:
             source_file_path = os.path.join(source_path, subdir, file_name)
+
             convert_file_to_csv(source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_by_type_and_contractor_including_measures_on_existing_buildings(
                 source_file_path, clean=clean, quiet=quiet
@@ -27,6 +30,8 @@ def convert_data_to_csv(source_path, results_path, clean=False, quiet=False):
             convert_file_to_csv_by_secondary_water_heating_energy(source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_by_type_and_predominant_building_material(source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_execution_time_by_type_and_contractor(source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_by_district_including_measures_on_existing_buildings(source_file_path, clean=clean,
+                                                                                     quiet=quiet)
 
 
 def convert_file_to_csv(source_file_path, clean=False, quiet=False):
@@ -34,67 +39,57 @@ def convert_file_to_csv(source_file_path, clean=False, quiet=False):
     file_path_csv = f"{source_file_name}.csv"
 
     # Check if result needs to be generated
-    if clean or not os.path.exists(file_path_csv):
-        # Determine engine
-        if source_file_extension == ".xlsx":
-            engine = "openpyxl"
-        elif source_file_extension == ".xls":
-            engine = None
-        else:
-            return
+    if not clean and os.path.exists(file_path_csv):
+        if not quiet:
+            print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        return
 
-        year = os.path.basename(source_file_name).split(sep="-")[-2]
+    # Determine engine
+    engine = build_engine(source_file_extension)
 
-        try:
-            dataframes = []
+    year = os.path.basename(source_file_name).split(sep="-")[-2]
 
-            # Iterate over sheets
-            sheet = "Baufert. Tab. 1 u. 2"
-            skiprows = 10
-            names = ["year", "building_completion_total", "building_completion_residential_buildings",
-                     "building_completion_non_residential_buildings",
-                     "building_measure_on_existing_buildings", "usage_area", "living_area", "apartments",
-                     "apartment_rooms", "total_costs"]
-            drop_columns = []
+    try:
+        dataframes = []
 
-            dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                      usecols=list(range(0, len(names))), names=names) \
-                .drop(columns=drop_columns, errors="ignore") \
-                .dropna()
-            dataframe = dataframe.loc[dataframe["year"] == int(year)].head(1)
-            dataframes.append(dataframe)
+        # Iterate over sheets
+        sheet = "Baufert. Tab. 1 u. 2"
+        skiprows = 10
+        names = ["year", "building_completion_total", "building_completion_residential_buildings",
+                 "building_completion_non_residential_buildings",
+                 "building_measure_on_existing_buildings", "usage_area", "living_area", "apartments",
+                 "apartment_rooms", "total_costs"]
+        drop_columns = []
 
-            sheet = "Baufert. Tab. 1 u. 2"
-            skiprows = 33
-            names = ["year", "building_completions_new", "building_completions_new_with_1_apartment",
-                     "building_completions_new_with_2_apartments",
-                     "building_completions_new_with_3_or_more_apartment",
-                     "building_completions_new_total_apartments", "building_completions_new_volume",
-                     "building_completions_new_living_area", "building_completions_new_costs"]
-            drop_columns = []
-            dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                      usecols=list(range(0, len(names))), names=names) \
-                .drop(columns=drop_columns, errors="ignore") \
-                .dropna()
-            dataframe = dataframe.loc[dataframe["year"] == int(year)].head(1)
-            dataframes.append(dataframe)
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                  usecols=list(range(0, len(names))), names=names) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .dropna()
+        dataframe = dataframe.loc[dataframe["year"] == int(year)].head(1)
+        dataframes.append(dataframe)
 
-            # Join dataframes
-            dataframe = pd.concat(dataframes, axis=1).drop(columns=["year"], errors="ignore")
+        sheet = "Baufert. Tab. 1 u. 2"
+        skiprows = 33
+        names = ["year", "building_completions_new", "building_completions_new_with_1_apartment",
+                 "building_completions_new_with_2_apartments",
+                 "building_completions_new_with_3_or_more_apartment",
+                 "building_completions_new_total_apartments", "building_completions_new_volume",
+                 "building_completions_new_living_area", "building_completions_new_costs"]
+        drop_columns = []
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                  usecols=list(range(0, len(names))), names=names) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .dropna()
+        dataframe = dataframe.loc[dataframe["year"] == int(year)].head(1)
+        dataframes.append(dataframe)
 
-            # Write csv file
-            if dataframe.shape[0] > 0:
-                dataframe.to_csv(file_path_csv, index=False)
-            if not quiet:
-                print(f"✓ Convert {os.path.basename(file_path_csv)}")
-            else:
-                if not quiet:
-                    print(dataframe.head())
-                    print(f"✗️ Empty {os.path.basename(file_path_csv)}")
-        except Exception as e:
-            print(f"✗️ Exception: {str(e)}")
-    elif not quiet:
-        print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        # Join dataframes
+        dataframe = pd.concat(dataframes, axis=1).drop(columns=["year"], errors="ignore")
+
+        # Write csv file
+        write_csv_file(dataframe, file_path_csv, quiet)
+    except Exception as e:
+        print(f"✗️ Exception: {str(e)}")
 
 
 def convert_file_to_csv_by_type_and_contractor_including_measures_on_existing_buildings(source_file_path, clean=False,
@@ -103,49 +98,39 @@ def convert_file_to_csv_by_type_and_contractor_including_measures_on_existing_bu
     file_path_csv = f"{source_file_name}-3-by-type-and-constructor-including-measures-on-existing-buildings.csv"
 
     # Check if result needs to be generated
-    if clean or not os.path.exists(file_path_csv):
-        # Determine engine
-        if source_file_extension == ".xlsx":
-            engine = "openpyxl"
-        elif source_file_extension == ".xls":
-            engine = None
-        else:
-            return
+    if not clean and os.path.exists(file_path_csv):
+        if not quiet:
+            print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        return
 
-        try:
-            sheet = "Baufert. Tab. 3"
-            skiprows = 7
-            names = ["type", "measures", "usage_area", "apartments", "living_area", "living_rooms", "estimated_costs"]
-            drop_columns = []
+    # Determine engine
+    engine = build_engine(source_file_extension)
 
-            dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                      usecols=list(range(0, len(names))), names=names) \
-                .drop(columns=drop_columns, errors="ignore") \
-                .dropna() \
-                .replace("–", 0) \
-                .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+    try:
+        sheet = "Baufert. Tab. 3"
+        skiprows = 7
+        names = ["type", "measures", "usage_area", "apartments", "living_area", "living_rooms", "estimated_costs"]
+        drop_columns = []
 
-            dataframe.reset_index(drop=True, inplace=True)
-            dataframe = dataframe.assign(type_index=lambda df: df.index) \
-                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_3(row), axis=1)) \
-                .fillna(-1) \
-                .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
-            dataframe.insert(0, "type_index", dataframe.pop("type_index"))
-            dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                  usecols=list(range(0, len(names))), names=names) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .dropna() \
+            .replace("–", 0) \
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
 
-            # Write csv file
-            if dataframe.shape[0] > 0:
-                dataframe.to_csv(file_path_csv, index=False)
-            if not quiet:
-                print(f"✓ Convert {os.path.basename(file_path_csv)}")
-            else:
-                if not quiet:
-                    print(dataframe.head())
-                    print(f"✗️ Empty {os.path.basename(file_path_csv)}")
-        except Exception as e:
-            print(f"✗️ Exception: {str(e)}")
-    elif not quiet:
-        print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        dataframe.reset_index(drop=True, inplace=True)
+        dataframe = dataframe.assign(type_index=lambda df: df.index) \
+            .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_3(row), axis=1)) \
+            .fillna(-1) \
+            .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
+        dataframe.insert(0, "type_index", dataframe.pop("type_index"))
+        dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+
+        # Write csv file
+        write_csv_file(dataframe, file_path_csv, quiet)
+    except Exception as e:
+        print(f"✗️ Exception: {str(e)}")
 
 
 def convert_file_to_csv_by_type_and_contractor(source_file_path, clean=False, quiet=False):
@@ -153,50 +138,40 @@ def convert_file_to_csv_by_type_and_contractor(source_file_path, clean=False, qu
     file_path_csv = f"{source_file_name}-4-by-type-and-constructor.csv"
 
     # Check if result needs to be generated
-    if clean or not os.path.exists(file_path_csv):
-        # Determine engine
-        if source_file_extension == ".xlsx":
-            engine = "openpyxl"
-        elif source_file_extension == ".xls":
-            engine = None
-        else:
-            return
+    if not clean and os.path.exists(file_path_csv):
+        if not quiet:
+            print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        return
 
-        try:
-            sheet = "Baufert. Tab. 4 "
-            skiprows = 7
-            names = ["type", "buildings", "volume", "usage_area", "apartments", "living_area", "living_rooms",
-                     "estimated_costs"]
-            drop_columns = []
+    # Determine engine
+    engine = build_engine(source_file_extension)
 
-            dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                      usecols=list(range(0, len(names))), names=names) \
-                .drop(columns=drop_columns, errors="ignore") \
-                .dropna() \
-                .replace("–", 0) \
-                .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+    try:
+        sheet = "Baufert. Tab. 4 "
+        skiprows = 7
+        names = ["type", "buildings", "volume", "usage_area", "apartments", "living_area", "living_rooms",
+                 "estimated_costs"]
+        drop_columns = []
 
-            dataframe.reset_index(drop=True, inplace=True)
-            dataframe = dataframe.assign(type_index=lambda df: df.index) \
-                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_4(row), axis=1)) \
-                .fillna(-1) \
-                .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
-            dataframe.insert(0, "type_index", dataframe.pop("type_index"))
-            dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                  usecols=list(range(0, len(names))), names=names) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .dropna() \
+            .replace("–", 0) \
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
 
-            # Write csv file
-            if dataframe.shape[0] > 0:
-                dataframe.to_csv(file_path_csv, index=False)
-            if not quiet:
-                print(f"✓ Convert {os.path.basename(file_path_csv)}")
-            else:
-                if not quiet:
-                    print(dataframe.head())
-                    print(f"✗️ Empty {os.path.basename(file_path_csv)}")
-        except Exception as e:
-            print(f"✗️ Exception: {str(e)}")
-    elif not quiet:
-        print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        dataframe.reset_index(drop=True, inplace=True)
+        dataframe = dataframe.assign(type_index=lambda df: df.index) \
+            .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_4(row), axis=1)) \
+            .fillna(-1) \
+            .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
+        dataframe.insert(0, "type_index", dataframe.pop("type_index"))
+        dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+
+        # Write csv file
+        write_csv_file(dataframe, file_path_csv, quiet)
+    except Exception as e:
+        print(f"✗️ Exception: {str(e)}")
 
 
 def convert_file_to_csv_by_building_type_and_heating(source_file_path, clean=False, quiet=False):
@@ -204,50 +179,40 @@ def convert_file_to_csv_by_building_type_and_heating(source_file_path, clean=Fal
     file_path_csv = f"{source_file_name}-5-by-building-type-and-heating.csv"
 
     # Check if result needs to be generated
-    if clean or not os.path.exists(file_path_csv):
-        # Determine engine
-        if source_file_extension == ".xlsx":
-            engine = "openpyxl"
-        elif source_file_extension == ".xls":
-            engine = None
-        else:
-            return
+    if not clean and os.path.exists(file_path_csv):
+        if not quiet:
+            print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        return
 
-        try:
-            sheet = "Baufert. Tab.5"
-            skiprows = 7
-            names = ["type", "buildings", "district_heating", "block_heating", "central_heating", "floor_heating",
-                     "single_room_heating", "without_heating"]
-            drop_columns = []
+    # Determine engine
+    engine = build_engine(source_file_extension)
 
-            dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                      usecols=list(range(0, len(names))), names=names) \
-                .drop(columns=drop_columns, errors="ignore") \
-                .dropna() \
-                .replace("–", 0) \
-                .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+    try:
+        sheet = "Baufert. Tab.5"
+        skiprows = 7
+        names = ["type", "buildings", "district_heating", "block_heating", "central_heating", "floor_heating",
+                 "single_room_heating", "without_heating"]
+        drop_columns = []
 
-            dataframe.reset_index(drop=True, inplace=True)
-            dataframe = dataframe.assign(type_index=lambda df: df.index) \
-                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_5(row), axis=1)) \
-                .fillna(-1) \
-                .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
-            dataframe.insert(0, "type_index", dataframe.pop("type_index"))
-            dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                  usecols=list(range(0, len(names))), names=names) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .dropna() \
+            .replace("–", 0) \
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
 
-            # Write csv file
-            if dataframe.shape[0] > 0:
-                dataframe.to_csv(file_path_csv, index=False)
-            if not quiet:
-                print(f"✓ Convert {os.path.basename(file_path_csv)}")
-            else:
-                if not quiet:
-                    print(dataframe.head())
-                    print(f"✗️ Empty {os.path.basename(file_path_csv)}")
-        except Exception as e:
-            print(f"✗️ Exception: {str(e)}")
-    elif not quiet:
-        print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        dataframe.reset_index(drop=True, inplace=True)
+        dataframe = dataframe.assign(type_index=lambda df: df.index) \
+            .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_5(row), axis=1)) \
+            .fillna(-1) \
+            .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
+        dataframe.insert(0, "type_index", dataframe.pop("type_index"))
+        dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+
+        # Write csv file
+        write_csv_file(dataframe, file_path_csv, quiet)
+    except Exception as e:
+        print(f"✗️ Exception: {str(e)}")
 
 
 def convert_file_to_csv_by_primary_heating_energy(source_file_path, clean=False, quiet=False):
@@ -255,51 +220,41 @@ def convert_file_to_csv_by_primary_heating_energy(source_file_path, clean=False,
     file_path_csv = f"{source_file_name}-6-by-primary-heating-energy.csv"
 
     # Check if result needs to be generated
-    if clean or not os.path.exists(file_path_csv):
-        # Determine engine
-        if source_file_extension == ".xlsx":
-            engine = "openpyxl"
-        elif source_file_extension == ".xls":
-            engine = None
-        else:
-            return
+    if not clean and os.path.exists(file_path_csv):
+        if not quiet:
+            print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        return
 
-        try:
-            sheet = "Baufert. Tab. 6 "
-            skiprows = 6
-            names = ["id", "type", "buildings", "oil", "gas", "electricity", "district_heating", "geothermal_energy",
-                     "environmental_thermal_energy", "solar_thermal_energy", "wood", "biogas_bio_methane",
-                     "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
-            drop_columns = ["id"]
+    # Determine engine
+    engine = build_engine(source_file_extension)
 
-            dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                      usecols=list(range(0, len(names))), names=names) \
-                .drop(columns=drop_columns, errors="ignore") \
-                .dropna() \
-                .replace("–", 0) \
-                .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+    try:
+        sheet = "Baufert. Tab. 6 "
+        skiprows = 6
+        names = ["id", "type", "buildings", "oil", "gas", "electricity", "district_heating", "geothermal_energy",
+                 "environmental_thermal_energy", "solar_thermal_energy", "wood", "biogas_bio_methane",
+                 "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
+        drop_columns = ["id"]
 
-            dataframe.reset_index(drop=True, inplace=True)
-            dataframe = dataframe.assign(type_index=lambda df: df.index) \
-                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_6_7_8_9(row), axis=1)) \
-                .fillna(-1) \
-                .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
-            dataframe.insert(0, "type_index", dataframe.pop("type_index"))
-            dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                  usecols=list(range(0, len(names))), names=names) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .dropna() \
+            .replace("–", 0) \
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
 
-            # Write csv file
-            if dataframe.shape[0] > 0:
-                dataframe.to_csv(file_path_csv, index=False)
-            if not quiet:
-                print(f"✓ Convert {os.path.basename(file_path_csv)}")
-            else:
-                if not quiet:
-                    print(dataframe.head())
-                    print(f"✗️ Empty {os.path.basename(file_path_csv)}")
-        except Exception as e:
-            print(f"✗️ Exception: {str(e)}")
-    elif not quiet:
-        print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        dataframe.reset_index(drop=True, inplace=True)
+        dataframe = dataframe.assign(type_index=lambda df: df.index) \
+            .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_6_7_8_9(row), axis=1)) \
+            .fillna(-1) \
+            .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
+        dataframe.insert(0, "type_index", dataframe.pop("type_index"))
+        dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+
+        # Write csv file
+        write_csv_file(dataframe, file_path_csv, quiet)
+    except Exception as e:
+        print(f"✗️ Exception: {str(e)}")
 
 
 def convert_file_to_csv_by_secondary_heating_energy(source_file_path, clean=False, quiet=False):
@@ -307,51 +262,41 @@ def convert_file_to_csv_by_secondary_heating_energy(source_file_path, clean=Fals
     file_path_csv = f"{source_file_name}-7-by-secondary-heating-energy.csv"
 
     # Check if result needs to be generated
-    if clean or not os.path.exists(file_path_csv):
-        # Determine engine
-        if source_file_extension == ".xlsx":
-            engine = "openpyxl"
-        elif source_file_extension == ".xls":
-            engine = None
-        else:
-            return
+    if not clean and os.path.exists(file_path_csv):
+        if not quiet:
+            print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        return
 
-        try:
-            sheet = "Baufert. Tab. 7 "
-            skiprows = 6
-            names = ["id", "type", "buildings", "oil", "gas", "electricity", "district_heating", "geothermal_energy",
-                     "environmental_thermal_energy", "solar_thermal_energy", "wood", "biogas_bio_methane",
-                     "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
-            drop_columns = ["id"]
+    # Determine engine
+    engine = build_engine(source_file_extension)
 
-            dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                      usecols=list(range(0, len(names))), names=names) \
-                .drop(columns=drop_columns, errors="ignore") \
-                .dropna() \
-                .replace("–", 0) \
-                .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+    try:
+        sheet = "Baufert. Tab. 7 "
+        skiprows = 6
+        names = ["id", "type", "buildings", "oil", "gas", "electricity", "district_heating", "geothermal_energy",
+                 "environmental_thermal_energy", "solar_thermal_energy", "wood", "biogas_bio_methane",
+                 "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
+        drop_columns = ["id"]
 
-            dataframe.reset_index(drop=True, inplace=True)
-            dataframe = dataframe.assign(type_index=lambda df: df.index) \
-                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_6_7_8_9(row), axis=1)) \
-                .fillna(-1) \
-                .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
-            dataframe.insert(0, "type_index", dataframe.pop("type_index"))
-            dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                  usecols=list(range(0, len(names))), names=names) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .dropna() \
+            .replace("–", 0) \
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
 
-            # Write csv file
-            if dataframe.shape[0] > 0:
-                dataframe.to_csv(file_path_csv, index=False)
-            if not quiet:
-                print(f"✓ Convert {os.path.basename(file_path_csv)}")
-            else:
-                if not quiet:
-                    print(dataframe.head())
-                    print(f"✗️ Empty {os.path.basename(file_path_csv)}")
-        except Exception as e:
-            print(f"✗️ Exception: {str(e)}")
-    elif not quiet:
-        print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        dataframe.reset_index(drop=True, inplace=True)
+        dataframe = dataframe.assign(type_index=lambda df: df.index) \
+            .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_6_7_8_9(row), axis=1)) \
+            .fillna(-1) \
+            .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
+        dataframe.insert(0, "type_index", dataframe.pop("type_index"))
+        dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+
+        # Write csv file
+        write_csv_file(dataframe, file_path_csv, quiet)
+    except Exception as e:
+        print(f"✗️ Exception: {str(e)}")
 
 
 def convert_file_to_csv_by_primary_water_heating_energy(source_file_path, clean=False, quiet=False):
@@ -359,51 +304,41 @@ def convert_file_to_csv_by_primary_water_heating_energy(source_file_path, clean=
     file_path_csv = f"{source_file_name}-8-by-primary-water-heating-energy.csv"
 
     # Check if result needs to be generated
-    if clean or not os.path.exists(file_path_csv):
-        # Determine engine
-        if source_file_extension == ".xlsx":
-            engine = "openpyxl"
-        elif source_file_extension == ".xls":
-            engine = None
-        else:
-            return
+    if not clean and os.path.exists(file_path_csv):
+        if not quiet:
+            print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        return
 
-        try:
-            sheet = "Baufert. Tab. 7 "
-            skiprows = 6
-            names = ["id", "type", "buildings", "oil", "gas", "electricity", "district_heating", "geothermal_energy",
-                     "environmental_thermal_energy", "solar_thermal_energy", "wood", "biogas_bio_methane",
-                     "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
-            drop_columns = ["id"]
+    # Determine engine
+    engine = build_engine(source_file_extension)
 
-            dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                      usecols=list(range(0, len(names))), names=names) \
-                .drop(columns=drop_columns, errors="ignore") \
-                .dropna() \
-                .replace("–", 0) \
-                .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+    try:
+        sheet = "Baufert. Tab. 7 "
+        skiprows = 6
+        names = ["id", "type", "buildings", "oil", "gas", "electricity", "district_heating", "geothermal_energy",
+                 "environmental_thermal_energy", "solar_thermal_energy", "wood", "biogas_bio_methane",
+                 "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
+        drop_columns = ["id"]
 
-            dataframe.reset_index(drop=True, inplace=True)
-            dataframe = dataframe.assign(type_index=lambda df: df.index) \
-                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_6_7_8_9(row), axis=1)) \
-                .fillna(-1) \
-                .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
-            dataframe.insert(0, "type_index", dataframe.pop("type_index"))
-            dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                  usecols=list(range(0, len(names))), names=names) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .dropna() \
+            .replace("–", 0) \
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
 
-            # Write csv file
-            if dataframe.shape[0] > 0:
-                dataframe.to_csv(file_path_csv, index=False)
-            if not quiet:
-                print(f"✓ Convert {os.path.basename(file_path_csv)}")
-            else:
-                if not quiet:
-                    print(dataframe.head())
-                    print(f"✗️ Empty {os.path.basename(file_path_csv)}")
-        except Exception as e:
-            print(f"✗️ Exception: {str(e)}")
-    elif not quiet:
-        print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        dataframe.reset_index(drop=True, inplace=True)
+        dataframe = dataframe.assign(type_index=lambda df: df.index) \
+            .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_6_7_8_9(row), axis=1)) \
+            .fillna(-1) \
+            .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
+        dataframe.insert(0, "type_index", dataframe.pop("type_index"))
+        dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+
+        # Write csv file
+        write_csv_file(dataframe, file_path_csv, quiet)
+    except Exception as e:
+        print(f"✗️ Exception: {str(e)}")
 
 
 def convert_file_to_csv_by_secondary_water_heating_energy(source_file_path, clean=False, quiet=False):
@@ -411,51 +346,41 @@ def convert_file_to_csv_by_secondary_water_heating_energy(source_file_path, clea
     file_path_csv = f"{source_file_name}-9-by-secondary-water-heating-energy.csv"
 
     # Check if result needs to be generated
-    if clean or not os.path.exists(file_path_csv):
-        # Determine engine
-        if source_file_extension == ".xlsx":
-            engine = "openpyxl"
-        elif source_file_extension == ".xls":
-            engine = None
-        else:
-            return
+    if not clean and os.path.exists(file_path_csv):
+        if not quiet:
+            print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        return
 
-        try:
-            sheet = "Baufert. Tab. 9 "
-            skiprows = 6
-            names = ["id", "type", "buildings", "oil", "gas", "electricity", "district_heating", "geothermal_energy",
-                     "environmental_thermal_energy", "solar_thermal_energy", "wood", "biogas_bio_methane",
-                     "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
-            drop_columns = ["id"]
+    # Determine engine
+    engine = build_engine(source_file_extension)
 
-            dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                      usecols=list(range(0, len(names))), names=names) \
-                .drop(columns=drop_columns, errors="ignore") \
-                .dropna() \
-                .replace("–", 0) \
-                .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+    try:
+        sheet = "Baufert. Tab. 9 "
+        skiprows = 6
+        names = ["id", "type", "buildings", "oil", "gas", "electricity", "district_heating", "geothermal_energy",
+                 "environmental_thermal_energy", "solar_thermal_energy", "wood", "biogas_bio_methane",
+                 "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
+        drop_columns = ["id"]
 
-            dataframe.reset_index(drop=True, inplace=True)
-            dataframe = dataframe.assign(type_index=lambda df: df.index) \
-                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_6_7_8_9(row), axis=1)) \
-                .fillna(-1) \
-                .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
-            dataframe.insert(0, "type_index", dataframe.pop("type_index"))
-            dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                  usecols=list(range(0, len(names))), names=names) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .dropna() \
+            .replace("–", 0) \
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
 
-            # Write csv file
-            if dataframe.shape[0] > 0:
-                dataframe.to_csv(file_path_csv, index=False)
-            if not quiet:
-                print(f"✓ Convert {os.path.basename(file_path_csv)}")
-            else:
-                if not quiet:
-                    print(dataframe.head())
-                    print(f"✗️ Empty {os.path.basename(file_path_csv)}")
-        except Exception as e:
-            print(f"✗️ Exception: {str(e)}")
-    elif not quiet:
-        print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        dataframe.reset_index(drop=True, inplace=True)
+        dataframe = dataframe.assign(type_index=lambda df: df.index) \
+            .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_6_7_8_9(row), axis=1)) \
+            .fillna(-1) \
+            .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
+        dataframe.insert(0, "type_index", dataframe.pop("type_index"))
+        dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+
+        # Write csv file
+        write_csv_file(dataframe, file_path_csv, quiet)
+    except Exception as e:
+        print(f"✗️ Exception: {str(e)}")
 
 
 def convert_file_to_csv_by_type_and_predominant_building_material(source_file_path, clean=False, quiet=False):
@@ -463,50 +388,40 @@ def convert_file_to_csv_by_type_and_predominant_building_material(source_file_pa
     file_path_csv = f"{source_file_name}-10-by-type-and-predominant-building-material.csv"
 
     # Check if result needs to be generated
-    if clean or not os.path.exists(file_path_csv):
-        # Determine engine
-        if source_file_extension == ".xlsx":
-            engine = "openpyxl"
-        elif source_file_extension == ".xls":
-            engine = None
-        else:
-            return
+    if not clean and os.path.exists(file_path_csv):
+        if not quiet:
+            print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        return
 
-        try:
-            sheet = "Baufert. Tab. 10"
-            skiprows = 7
-            names = ["type", "unit", "buildings", "steel", "reinforced_concrete", "bricks", "sand_lime_bricks",
-                     "aerated_concrete", "light_concrete", "wood", "other"]
-            drop_columns = ["unit"]
+    # Determine engine
+    engine = build_engine(source_file_extension)
 
-            dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                      usecols=list(range(0, len(names))), names=names) \
-                .drop(columns=drop_columns, errors="ignore") \
-                .dropna() \
-                .replace("–", 0) \
-                .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+    try:
+        sheet = "Baufert. Tab. 10"
+        skiprows = 7
+        names = ["type", "unit", "buildings", "steel", "reinforced_concrete", "bricks", "sand_lime_bricks",
+                 "aerated_concrete", "light_concrete", "wood", "other"]
+        drop_columns = ["unit"]
 
-            dataframe.reset_index(drop=True, inplace=True)
-            dataframe = dataframe.assign(type_index=lambda df: df.index) \
-                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_10(row), axis=1)) \
-                .fillna(-1) \
-                .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
-            dataframe.insert(0, "type_index", dataframe.pop("type_index"))
-            dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                  usecols=list(range(0, len(names))), names=names) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .dropna() \
+            .replace("–", 0) \
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
 
-            # Write csv file
-            if dataframe.shape[0] > 0:
-                dataframe.to_csv(file_path_csv, index=False)
-            if not quiet:
-                print(f"✓ Convert {os.path.basename(file_path_csv)}")
-            else:
-                if not quiet:
-                    print(dataframe.head())
-                    print(f"✗️ Empty {os.path.basename(file_path_csv)}")
-        except Exception as e:
-            print(f"✗️ Exception: {str(e)}")
-    elif not quiet:
-        print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        dataframe.reset_index(drop=True, inplace=True)
+        dataframe = dataframe.assign(type_index=lambda df: df.index) \
+            .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_10(row), axis=1)) \
+            .fillna(-1) \
+            .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
+        dataframe.insert(0, "type_index", dataframe.pop("type_index"))
+        dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+
+        # Write csv file
+        write_csv_file(dataframe, file_path_csv, quiet)
+    except Exception as e:
+        print(f"✗️ Exception: {str(e)}")
 
 
 def convert_file_to_csv_execution_time_by_type_and_contractor(source_file_path, clean=False, quiet=False):
@@ -514,76 +429,102 @@ def convert_file_to_csv_execution_time_by_type_and_contractor(source_file_path, 
     file_path_csv = f"{source_file_name}-11-execution-time-by-type-and-contractor.csv"
 
     # Check if result needs to be generated
-    if clean or not os.path.exists(file_path_csv):
-        # Determine engine
-        if source_file_extension == ".xlsx":
-            engine = "openpyxl"
-        elif source_file_extension == ".xls":
-            engine = None
-        else:
-            return
+    if not clean and os.path.exists(file_path_csv):
+        if not quiet:
+            print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        return
 
-        try:
-            sheet = "Baufert. Tab. 11"
-            skiprows = 8
-            names = ["type", "unit", "total", "execution_time_between_6_12_months",
-                     "execution_time_between_12_18_months", "execution_time_between_18_24_months",
-                     "execution_time_between_24_30_months", "execution_time_between_30_36_months",
-                     "execution_time_above_36_months"]
-            drop_columns = []
+    # Determine engine
+    engine = build_engine(source_file_extension)
 
-            dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                      usecols=list(range(0, len(names))), names=names) \
-                .drop(columns=drop_columns, errors="ignore") \
-                .replace("–", 0) \
-                .fillna(0) \
-                .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
-                .assign(unit=lambda df: df["unit"].apply(lambda row: build_unit_name(row))) \
-                .assign(total=lambda df: df["total"].astype(int)) \
-                .assign(
-                execution_time_between_6_12_months=lambda df: df["execution_time_between_6_12_months"].astype(int)) \
-                .assign(
-                execution_time_between_12_18_months=lambda df: df["execution_time_between_12_18_months"].astype(int)) \
-                .assign(
-                execution_time_between_18_24_months=lambda df: df["execution_time_between_18_24_months"].astype(int)) \
-                .assign(
-                execution_time_between_24_30_months=lambda df: df["execution_time_between_24_30_months"].astype(int)) \
-                .assign(
-                execution_time_between_30_36_months=lambda df: df["execution_time_between_30_36_months"].astype(int)) \
-                .assign(execution_time_above_36_months=lambda df: df["execution_time_above_36_months"].astype(int))
+    try:
+        sheet = "Baufert. Tab. 11"
+        skiprows = 8
+        names = ["type", "unit", "total", "execution_time_between_6_12_months",
+                 "execution_time_between_12_18_months", "execution_time_between_18_24_months",
+                 "execution_time_between_24_30_months", "execution_time_between_30_36_months",
+                 "execution_time_above_36_months"]
+        drop_columns = []
 
-            dataframe = dataframe[dataframe["total"] != 0.0]
-            dataframe = dataframe[dataframe["type"] != "davon"]
-            dataframe = dataframe[dataframe["type"] != "darunter"]
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                  usecols=list(range(0, len(names))), names=names) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .replace("–", 0) \
+            .fillna(0) \
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
+            .assign(unit=lambda df: df["unit"].apply(lambda row: build_unit_name(row))) \
+            .assign(total=lambda df: df["total"].astype(int)) \
+            .assign(
+            execution_time_between_6_12_months=lambda df: df["execution_time_between_6_12_months"].astype(int)) \
+            .assign(
+            execution_time_between_12_18_months=lambda df: df["execution_time_between_12_18_months"].astype(int)) \
+            .assign(
+            execution_time_between_18_24_months=lambda df: df["execution_time_between_18_24_months"].astype(int)) \
+            .assign(
+            execution_time_between_24_30_months=lambda df: df["execution_time_between_24_30_months"].astype(int)) \
+            .assign(
+            execution_time_between_30_36_months=lambda df: df["execution_time_between_30_36_months"].astype(int)) \
+            .assign(execution_time_above_36_months=lambda df: df["execution_time_above_36_months"].astype(int))
 
-            dataframe["type"] = dataframe["type"].replace("0", pd.NA).fillna(method="ffill")
+        dataframe = dataframe[dataframe["total"] != 0.0]
+        dataframe = dataframe[dataframe["type"] != "davon"]
+        dataframe = dataframe[dataframe["type"] != "darunter"]
 
-            dataframe.reset_index(drop=True, inplace=True)
-            dataframe = dataframe.assign(type_index=lambda df: df.index) \
-                .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_11(row), axis=1)) \
-                .fillna("") \
-                .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
-            dataframe.insert(0, "type_index", dataframe.pop("type_index"))
-            dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+        dataframe["type"] = dataframe["type"].replace("0", pd.NA).fillna(method="ffill")
 
-            # Write csv file
-            if dataframe.shape[0] > 0:
-                dataframe.to_csv(file_path_csv, index=False)
-            if not quiet:
-                print(f"✓ Convert {os.path.basename(file_path_csv)}")
-            else:
-                if not quiet:
-                    print(dataframe.head())
-                    print(f"✗️ Empty {os.path.basename(file_path_csv)}")
-        except Exception as e:
-            print(f"✗️ Exception: {str(e)}")
-    elif not quiet:
-        print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        dataframe.reset_index(drop=True, inplace=True)
+        dataframe = dataframe.assign(type_index=lambda df: df.index) \
+            .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_11(row), axis=1)) \
+            .fillna("") \
+            .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
+        dataframe.insert(0, "type_index", dataframe.pop("type_index"))
+        dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+
+        # Write csv file
+        write_csv_file(dataframe, file_path_csv, quiet)
+    except Exception as e:
+        print(f"✗️ Exception: {str(e)}")
 
 
-def build_type_index(row):
-    return row.name
+def convert_file_to_csv_by_district_including_measures_on_existing_buildings(source_file_path, clean, quiet):
+    source_file_name, source_file_extension = os.path.splitext(source_file_path)
+    file_path_csv = f"{source_file_name}-12-by-district-including-measures-on-existing-buildings.csv"
 
+    # Check if result needs to be generated
+    if not clean and os.path.exists(file_path_csv):
+        if not quiet:
+            print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        return
+
+    # Determine engine
+    engine = build_engine(source_file_extension)
+
+    try:
+        sheet = "Baufert. Tab. 12 u. 13"
+        skiprows = 7
+        names = ["district_name", "buildings", "usage_area", "apartments", "apartments_usage_area", "estimated_costs"]
+        drop_columns = []
+
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                  names=names, index_col=False) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .replace("–", 0) \
+            .assign(district_id=lambda df: df["district_name"].apply(lambda row: build_district_id(row))) \
+            .head(12) \
+            .drop("district_name", axis=1)
+
+        dataframe.reset_index(drop=True, inplace=True)
+        dataframe.insert(0, "district_id", dataframe.pop("district_id"))
+
+        # Write csv file
+        write_csv_file(dataframe, file_path_csv, quiet)
+    except Exception as e:
+        print(f"✗️ Exception: {str(e)}")
+
+
+#
+# Transformers
+#
 
 def build_type_name(value):
     value = str(value).lstrip().rstrip()
@@ -1101,5 +1042,63 @@ def build_type_parent_index_11(row):
         return 1
     elif row_index == 25:
         return 1
+    elif row_index == 26:
+        return 1
+    elif row_index == 27:
+        return 1
     else:
         return None
+
+
+def build_district_id(value):
+    value = str(value).lstrip().rstrip().replace(" ", "")
+
+    if value == "Mitte":
+        return "01"
+    elif value == "Friedrichshain-Kreuzberg":
+        return "02"
+    elif value == "Pankow":
+        return "03"
+    elif value == "Charlottenburg-Wilmersdorf":
+        return "04"
+    elif value == "Spandau":
+        return "05"
+    elif value == "Steglitz-Zehlendorf":
+        return "06"
+    elif value == "Tempelhof-Schöneberg":
+        return "07"
+    elif value == "Neukölln":
+        return "08"
+    elif value == "Treptow-Köpenick":
+        return "09"
+    elif value == "Marzahn-Hellersdorf":
+        return "10"
+    elif value == "Lichtenberg":
+        return "11"
+    elif value == "Reinickendorf":
+        return "12"
+    else:
+        return None
+
+
+#
+# Helpers
+#
+
+def build_engine(source_file_extension):
+    return "openpyxl" if source_file_extension == ".xlsx" else None
+
+
+def build_type_index(row):
+    return row.name
+
+
+def write_csv_file(dataframe, file_path, quiet):
+    if dataframe.shape[0] > 0:
+        dataframe.to_csv(file_path, index=False)
+    if not quiet:
+        print(f"✓ Convert {os.path.basename(file_path)}")
+    else:
+        if not quiet:
+            print(dataframe.head())
+            print(f"✗️ Empty {os.path.basename(file_path)}")
