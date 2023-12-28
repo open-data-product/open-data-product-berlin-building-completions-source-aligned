@@ -37,6 +37,7 @@ def convert_data_to_csv(source_path, results_path, clean=False, quiet=False):
                                                                                  quiet=quiet)
             convert_file_to_csv_by_district_new_non_residential_buildings(source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_construction_backlog_housing_projects(source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_construction_backlog_apartments(source_file_path, clean=clean, quiet=quiet)
 
 
 def convert_file_to_csv(source_file_path, clean=False, quiet=False):
@@ -652,6 +653,49 @@ def convert_file_to_csv_construction_backlog_housing_projects(source_file_path, 
 
     try:
         sheet = "BAUÜB Tab. 16"
+        skiprows = 7
+        names = ["type", "backlog_total", "new_residential_buildings_backlog",
+                 "new_residential_buildings_under_roof", "new_residential_buildings_not_yet_under_roof",
+                 "new_residential_buildings_not_yet_started", "expired_building_permits"
+                 ]
+        drop_columns = []
+
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                  usecols=list(range(0, len(names))), names=names) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .replace("–", 0) \
+            .dropna() \
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+
+        dataframe.reset_index(drop=True, inplace=True)
+        dataframe = dataframe.assign(type_index=lambda df: df.index) \
+            .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_16(row), axis=1)) \
+            .fillna("") \
+            .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
+        dataframe.insert(0, "type_index", dataframe.pop("type_index"))
+        dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+
+        # Write csv file
+        write_csv_file(dataframe, file_path_csv, quiet)
+    except Exception as e:
+        print(f"✗️ Exception: {str(e)}")
+
+
+def convert_file_to_csv_construction_backlog_apartments(source_file_path, clean=False, quiet=False):
+    source_file_name, source_file_extension = os.path.splitext(source_file_path)
+    file_path_csv = f"{source_file_name}-17-construction-backlog-apartments.csv"
+
+    # Check if result needs to be generated
+    if not clean and os.path.exists(file_path_csv):
+        if not quiet:
+            print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        return
+
+    # Determine engine
+    engine = build_engine(source_file_extension)
+
+    try:
+        sheet = "BAUÜB Tab.  17 "
         skiprows = 7
         names = ["type", "backlog_total", "new_residential_buildings_backlog",
                  "new_residential_buildings_under_roof", "new_residential_buildings_not_yet_under_roof",
