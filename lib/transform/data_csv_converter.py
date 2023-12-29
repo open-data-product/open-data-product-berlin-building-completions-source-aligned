@@ -7,7 +7,6 @@ from lib.tracking_decorator import TrackingDecorator
 
 @TrackingDecorator.track_time
 def convert_data_to_csv(source_path, results_path, clean=False, quiet=False):
-    clean = True
 
     # Iterate over files
     for subdir, dirs, files in sorted(os.walk(source_path)):
@@ -42,6 +41,8 @@ def convert_data_to_csv(source_path, results_path, clean=False, quiet=False):
             convert_file_to_csv_construction_backlog_apartments(source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_construction_backlog_non_residential_buildings(source_file_path, clean=clean,
                                                                                quiet=quiet)
+            convert_file_to_csv_construction_outflow_in_residential_construction(source_file_path, clean=clean,
+                                                                                 quiet=quiet)
 
 
 def convert_file_to_csv(source_file_path, clean=False, quiet=False):
@@ -795,6 +796,48 @@ def convert_file_to_csv_construction_backlog_non_residential_buildings(source_fi
         print(f"✗️ Exception: {str(e)}")
 
 
+def convert_file_to_csv_construction_outflow_in_residential_construction(source_file_path, clean=False, quiet=False):
+    source_file_name, source_file_extension = os.path.splitext(source_file_path)
+    file_path_csv = f"{source_file_name}-19-outflow-in-residential-construction.csv"
+
+    # Check if result needs to be generated
+    if not clean and os.path.exists(file_path_csv):
+        if not quiet:
+            print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        return
+
+    # Determine engine
+    engine = build_engine(source_file_extension)
+
+    try:
+        sheet = "BAUAB Tab. 19"
+        skiprows = 7
+        names = ["type", "buildings", "usage_area", "living_area", "apartments"]
+        drop_columns = []
+
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                  usecols=list(range(0, len(names))), names=names) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .replace("–", 0) \
+            .dropna() \
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
+            .assign(buildings=lambda df: df["buildings"].astype(int)) \
+            .assign(apartments=lambda df: df["apartments"].astype(int))
+
+        dataframe.reset_index(drop=True, inplace=True)
+        dataframe = dataframe.assign(type_index=lambda df: df.index) \
+            .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_19(row), axis=1)) \
+            .fillna("") \
+            .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
+        dataframe.insert(0, "type_index", dataframe.pop("type_index"))
+        dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+
+        # Write csv file
+        write_csv_file(dataframe, file_path_csv, quiet)
+    except Exception as e:
+        print(f"✗️ Exception: {str(e)}")
+
+
 #
 # Transformers
 #
@@ -896,6 +939,23 @@ def build_type_name(value):
         return "2018 and earlier"
     elif value == "2017 und früher":
         return "2017 and earlier"
+
+    elif value == "vor  1919":
+        return "before 1919"
+    elif value == "von 1919 bis 1948":
+        return "between 1919 and 1948"
+    elif value == "von 1949 bis 1978":
+        return "between 1949 and 1978"
+    elif value == "von 1979 bis 1986":
+        return "between 1979 and 1986"
+    elif value == "von 1987 bis 1990":
+        return "between 1987 and 1990"
+    elif value == "von 1991 bis 1995":
+        return "between 1991 and 1995"
+    elif value == "von 1996 bis 2010":
+        return "between 1996 and 2010"
+    elif value == "2011 und später":
+        return "2011 and later"
 
     else:
         return value
@@ -1496,6 +1556,50 @@ def build_type_parent_index_18(row):
         return 0
     else:
         return None
+
+
+def build_type_parent_index_19(row):
+    row_index = row.name
+
+    if row_index == 0:
+        return -1
+    elif row_index == 1:
+        return 0
+    elif row_index == 2:
+        return 0
+    elif row_index == 3:
+        return 0
+    elif row_index == 4:
+        return 3
+    elif row_index == 5:
+        return 3
+    elif row_index == 6:
+        return 3
+    elif row_index == 7:
+        return 3
+    elif row_index == 8:
+        return 0
+    elif row_index == 9:
+        return 0
+    elif row_index == 10:
+        return 0
+    elif row_index == 11:
+        return 0
+    elif row_index == 12:
+        return 0
+    elif row_index == 13:
+        return 0
+    elif row_index == 14:
+        return 0
+    elif row_index == 15:
+        return 0
+    elif row_index == 16:
+        return 0
+    elif row_index == 17:
+        return 0
+    elif row_index == 18:
+        return 0
+    return None
 
 
 def build_district_id(value):
