@@ -39,11 +39,13 @@ def convert_data_to_csv(source_path, results_path, clean=False, quiet=False):
             convert_file_to_csv_construction_backlog_apartments(source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_construction_backlog_non_residential_buildings(
                 source_file_path, clean=clean, quiet=quiet)
-            convert_file_to_csv_construction_outflow_in_residential_construction(
+            convert_file_to_csv_construction_outflow_of_residential_buildings(
                 source_file_path, clean=clean, quiet=quiet)
-            convert_file_to_csv_construction_outflow_of_complete_residential_buildings(
+            convert_file_to_csv_construction_outflow_of_residential_buildings_complete(
                 source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_construction_outflow_of_non_residential_buildings(
+                source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_construction_outflow_of_non_residential_buildings_complete(
                 source_file_path, clean=clean, quiet=quiet)
 
 
@@ -798,9 +800,9 @@ def convert_file_to_csv_construction_backlog_non_residential_buildings(source_fi
         print(f"✗️ Exception: {str(e)}")
 
 
-def convert_file_to_csv_construction_outflow_in_residential_construction(source_file_path, clean=False, quiet=False):
+def convert_file_to_csv_construction_outflow_of_residential_buildings(source_file_path, clean=False, quiet=False):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}-19-outflow-in-residential-construction.csv"
+    file_path_csv = f"{source_file_name}-19-outflow-of-residential-buildings.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -840,10 +842,10 @@ def convert_file_to_csv_construction_outflow_in_residential_construction(source_
         print(f"✗️ Exception: {str(e)}")
 
 
-def convert_file_to_csv_construction_outflow_of_complete_residential_buildings(source_file_path, clean=False,
+def convert_file_to_csv_construction_outflow_of_residential_buildings_complete(source_file_path, clean=False,
                                                                                quiet=False):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}-20-outflow-of-complete-residential-buildings.csv"
+    file_path_csv = f"{source_file_name}-20-outflow-of-residential-buildings-complete.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -899,6 +901,49 @@ def convert_file_to_csv_construction_outflow_of_non_residential_buildings(source
 
     try:
         sheet = "BAUAB Tab. 21"
+        skiprows = 7
+        names = ["type", "buildings", "usage_area", "living_area", "apartments"]
+        drop_columns = []
+
+        dataframe = (pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
+                                   usecols=list(range(0, len(names))), names=names) \
+                     .drop(columns=drop_columns, errors="ignore") \
+                     .replace("–", 0) \
+                     .dropna() \
+                     .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
+                     .assign(buildings=lambda df: df["buildings"].astype(int)) \
+                     .assign(apartments=lambda df: df["apartments"].astype(int)))
+
+        dataframe.reset_index(drop=True, inplace=True)
+        dataframe = dataframe.assign(type_index=lambda df: df.index) \
+            .assign(type_parent_index=lambda df: df.apply(lambda row: build_type_parent_index_21(row), axis=1)) \
+            .fillna("") \
+            .assign(type_parent_index=lambda df: df["type_parent_index"].astype(int))
+        dataframe.insert(0, "type_index", dataframe.pop("type_index"))
+        dataframe.insert(1, "type_parent_index", dataframe.pop("type_parent_index"))
+
+        # Write csv file
+        write_csv_file(dataframe, file_path_csv, quiet)
+    except Exception as e:
+        print(f"✗️ Exception: {str(e)}")
+
+
+def convert_file_to_csv_construction_outflow_of_non_residential_buildings_complete(source_file_path, clean=False,
+                                                                                   quiet=False):
+    source_file_name, source_file_extension = os.path.splitext(source_file_path)
+    file_path_csv = f"{source_file_name}-22-outflow-of-non-residential-buildings-complete.csv"
+
+    # Check if result needs to be generated
+    if not clean and os.path.exists(file_path_csv):
+        if not quiet:
+            print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        return
+
+    # Determine engine
+    engine = build_engine(source_file_extension)
+
+    try:
+        sheet = "BAUAB Tab.  22"
         skiprows = 7
         names = ["type", "buildings", "usage_area", "living_area", "apartments"]
         drop_columns = []
