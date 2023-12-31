@@ -18,24 +18,27 @@ def convert_data_to_csv(source_path, results_path, clean=False, quiet=False):
                              (file_name.endswith(".xlsx") or file_name.endswith(".xls"))]:
             source_file_path = os.path.join(source_path, subdir, file_name)
 
-            convert_file_to_csv_new_buildings(source_file_path, clean=clean, quiet=quiet)
-            convert_file_to_csv_buildings_including_existing(source_file_path, clean=clean, quiet=quiet)
-            convert_file_to_csv_by_type_and_contractor_including_measures_on_existing_buildings(
+            convert_file_to_csv_completions_new_buildings(source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_completions_buildings_including_existing(source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_completions_by_type_and_contractor_including_measures_on_existing_buildings(
                 source_file_path, clean=clean, quiet=quiet)
-            convert_file_to_csv_by_type_and_contractor(source_file_path, clean=clean, quiet=quiet)
-            convert_file_to_csv_by_building_type_and_heating(source_file_path, clean=clean, quiet=quiet)
-            convert_file_to_csv_by_primary_heating_energy(source_file_path, clean=clean, quiet=quiet)
-            convert_file_to_csv_by_secondary_heating_energy(source_file_path, clean=clean, quiet=quiet)
-            convert_file_to_csv_by_primary_water_heating_energy(source_file_path, clean=clean, quiet=quiet)
-            convert_file_to_csv_by_secondary_water_heating_energy(source_file_path, clean=clean, quiet=quiet)
-            convert_file_to_csv_by_type_and_predominant_building_material(source_file_path, clean=clean, quiet=quiet)
-            convert_file_to_csv_execution_time_by_type_and_contractor(source_file_path, clean=clean, quiet=quiet)
-            convert_file_to_csv_by_district_including_measures_on_existing_buildings(
+            convert_file_to_csv_completions_by_type_and_contractor(source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_completions_by_building_type_and_heating(source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_completions_by_primary_heating_energy(source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_completions_by_secondary_heating_energy(source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_completions_by_primary_water_heating_energy(source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_completions_by_secondary_water_heating_energy(
                 source_file_path, clean=clean, quiet=quiet)
-            convert_file_to_csv_by_district_new_buildings(source_file_path, clean=clean, quiet=quiet)
-            convert_file_to_csv_by_district_new_buildings_with_1_or_2_apartments(
+            convert_file_to_csv_completions_by_type_and_predominant_building_material(
                 source_file_path, clean=clean, quiet=quiet)
-            convert_file_to_csv_by_district_new_non_residential_buildings(source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_completions_by_execution_time(source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_completions_by_district_including_measures_on_existing_buildings(
+                source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_completions_by_district_new_buildings(source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_completions_by_district_new_buildings_with_1_or_2_apartments(
+                source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_completions_by_district_new_non_residential_buildings(
+                source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_construction_backlog_housing_projects(source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_construction_backlog_apartments(source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_construction_backlog_non_residential_buildings(
@@ -52,9 +55,9 @@ def convert_data_to_csv(source_path, results_path, clean=False, quiet=False):
                 source_file_path, clean=clean, quiet=quiet)
 
 
-def convert_file_to_csv_new_buildings(source_file_path, clean=False, quiet=False):
+def convert_file_to_csv_completions_new_buildings(source_file_path, clean=False, quiet=False):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}-1-new-buildings.csv"
+    file_path_csv = f"{source_file_name}-1-completions-new-buildings.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -77,7 +80,8 @@ def convert_file_to_csv_new_buildings(source_file_path, clean=False, quiet=False
                  "apartment_rooms", "total_costs"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna()
         dataframe = dataframe.loc[dataframe["year"] == int(year)].head(1)
@@ -88,9 +92,9 @@ def convert_file_to_csv_new_buildings(source_file_path, clean=False, quiet=False
         print(f"✗️ Exception: {str(e)}")
 
 
-def convert_file_to_csv_buildings_including_existing(source_file_path, clean=False, quiet=False):
+def convert_file_to_csv_completions_buildings_including_existing(source_file_path, clean=False, quiet=False):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}-2-including-measures-on-existing-buildings.csv"
+    file_path_csv = f"{source_file_name}-2-completions-including-measures-on-existing-buildings.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -105,14 +109,15 @@ def convert_file_to_csv_buildings_including_existing(source_file_path, clean=Fal
 
     try:
         sheet = "Baufert. Tab. 1 u. 2"
-        skiprows = 33
+        skiprows = 32
         names = ["year", "building_completions_new", "building_completions_new_with_1_apartment",
                  "building_completions_new_with_2_apartments",
                  "building_completions_new_with_3_or_more_apartment",
                  "building_completions_new_total_apartments", "building_completions_new_volume",
                  "building_completions_new_living_area", "building_completions_new_costs"]
         drop_columns = []
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna()
         dataframe = dataframe.loc[dataframe["year"] == int(year)].head(1)
@@ -123,10 +128,11 @@ def convert_file_to_csv_buildings_including_existing(source_file_path, clean=Fal
         print(f"✗️ Exception: {str(e)}")
 
 
-def convert_file_to_csv_by_type_and_contractor_including_measures_on_existing_buildings(source_file_path, clean=False,
-                                                                                        quiet=False):
+def convert_file_to_csv_completions_by_type_and_contractor_including_measures_on_existing_buildings(source_file_path,
+                                                                                                    clean=False,
+                                                                                                    quiet=False):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}-3-by-type-and-constructor-including-measures-on-existing-buildings.csv"
+    file_path_csv = f"{source_file_name}-3-completions-by-type-and-constructor-including-measures-on-existing-buildings.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -143,7 +149,8 @@ def convert_file_to_csv_by_type_and_contractor_including_measures_on_existing_bu
         names = ["type", "measures", "usage_area", "apartments", "living_area", "living_rooms", "estimated_costs"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
@@ -163,9 +170,9 @@ def convert_file_to_csv_by_type_and_contractor_including_measures_on_existing_bu
         print(f"✗️ Exception: {str(e)}")
 
 
-def convert_file_to_csv_by_type_and_contractor(source_file_path, clean=False, quiet=False):
+def convert_file_to_csv_completions_by_type_and_contractor(source_file_path, clean=False, quiet=False):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}-4-by-type-and-constructor.csv"
+    file_path_csv = f"{source_file_name}-4-completions-by-type-and-constructor.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -183,7 +190,8 @@ def convert_file_to_csv_by_type_and_contractor(source_file_path, clean=False, qu
                  "estimated_costs"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
@@ -203,9 +211,9 @@ def convert_file_to_csv_by_type_and_contractor(source_file_path, clean=False, qu
         print(f"✗️ Exception: {str(e)}")
 
 
-def convert_file_to_csv_by_building_type_and_heating(source_file_path, clean=False, quiet=False):
+def convert_file_to_csv_completions_by_building_type_and_heating(source_file_path, clean=False, quiet=False):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}-5-by-building-type-and-heating.csv"
+    file_path_csv = f"{source_file_name}-5-completions-by-building-type-and-heating.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -223,7 +231,8 @@ def convert_file_to_csv_by_building_type_and_heating(source_file_path, clean=Fal
                  "single_room_heating", "without_heating"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
@@ -243,9 +252,9 @@ def convert_file_to_csv_by_building_type_and_heating(source_file_path, clean=Fal
         print(f"✗️ Exception: {str(e)}")
 
 
-def convert_file_to_csv_by_primary_heating_energy(source_file_path, clean=False, quiet=False):
+def convert_file_to_csv_completions_by_primary_heating_energy(source_file_path, clean=False, quiet=False):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}-6-by-primary-heating-energy.csv"
+    file_path_csv = f"{source_file_name}-6-completions-by-primary-heating-energy.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -264,7 +273,8 @@ def convert_file_to_csv_by_primary_heating_energy(source_file_path, clean=False,
                  "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
         drop_columns = ["id"]
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
@@ -284,9 +294,9 @@ def convert_file_to_csv_by_primary_heating_energy(source_file_path, clean=False,
         print(f"✗️ Exception: {str(e)}")
 
 
-def convert_file_to_csv_by_secondary_heating_energy(source_file_path, clean=False, quiet=False):
+def convert_file_to_csv_completions_by_secondary_heating_energy(source_file_path, clean=False, quiet=False):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}-7-by-secondary-heating-energy.csv"
+    file_path_csv = f"{source_file_name}-7-completions-by-secondary-heating-energy.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -305,7 +315,8 @@ def convert_file_to_csv_by_secondary_heating_energy(source_file_path, clean=Fals
                  "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
         drop_columns = ["id"]
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
@@ -325,9 +336,9 @@ def convert_file_to_csv_by_secondary_heating_energy(source_file_path, clean=Fals
         print(f"✗️ Exception: {str(e)}")
 
 
-def convert_file_to_csv_by_primary_water_heating_energy(source_file_path, clean=False, quiet=False):
+def convert_file_to_csv_completions_by_primary_water_heating_energy(source_file_path, clean=False, quiet=False):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}-8-by-primary-water-heating-energy.csv"
+    file_path_csv = f"{source_file_name}-8-completions-by-primary-water-heating-energy.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -346,7 +357,8 @@ def convert_file_to_csv_by_primary_water_heating_energy(source_file_path, clean=
                  "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
         drop_columns = ["id"]
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
@@ -366,9 +378,9 @@ def convert_file_to_csv_by_primary_water_heating_energy(source_file_path, clean=
         print(f"✗️ Exception: {str(e)}")
 
 
-def convert_file_to_csv_by_secondary_water_heating_energy(source_file_path, clean=False, quiet=False):
+def convert_file_to_csv_completions_by_secondary_water_heating_energy(source_file_path, clean=False, quiet=False):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}-9-by-secondary-water-heating-energy.csv"
+    file_path_csv = f"{source_file_name}-9-completions-by-secondary-water-heating-energy.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -387,7 +399,8 @@ def convert_file_to_csv_by_secondary_water_heating_energy(source_file_path, clea
                  "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
         drop_columns = ["id"]
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
@@ -407,9 +420,10 @@ def convert_file_to_csv_by_secondary_water_heating_energy(source_file_path, clea
         print(f"✗️ Exception: {str(e)}")
 
 
-def convert_file_to_csv_by_type_and_predominant_building_material(source_file_path, clean=False, quiet=False):
+def convert_file_to_csv_completions_by_type_and_predominant_building_material(source_file_path, clean=False,
+                                                                              quiet=False):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}-10-by-type-and-predominant-building-material.csv"
+    file_path_csv = f"{source_file_name}-10-completions-by-type-and-predominant-building-material.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -427,7 +441,8 @@ def convert_file_to_csv_by_type_and_predominant_building_material(source_file_pa
                  "aerated_concrete", "light_concrete", "wood", "other"]
         drop_columns = ["unit"]
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
@@ -447,9 +462,9 @@ def convert_file_to_csv_by_type_and_predominant_building_material(source_file_pa
         print(f"✗️ Exception: {str(e)}")
 
 
-def convert_file_to_csv_execution_time_by_type_and_contractor(source_file_path, clean=False, quiet=False):
+def convert_file_to_csv_completions_by_execution_time(source_file_path, clean=False, quiet=False):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}-11-execution-time-by-type-and-contractor.csv"
+    file_path_csv = f"{source_file_name}-11-completions-by-execution.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -469,7 +484,8 @@ def convert_file_to_csv_execution_time_by_type_and_contractor(source_file_path, 
                  "execution_time_above_36_months"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .fillna(0) \
@@ -508,9 +524,10 @@ def convert_file_to_csv_execution_time_by_type_and_contractor(source_file_path, 
         print(f"✗️ Exception: {str(e)}")
 
 
-def convert_file_to_csv_by_district_including_measures_on_existing_buildings(source_file_path, clean, quiet):
+def convert_file_to_csv_completions_by_district_including_measures_on_existing_buildings(source_file_path, clean,
+                                                                                         quiet):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}-12-by-district-including-measures-on-existing-buildings.csv"
+    file_path_csv = f"{source_file_name}-12-completions-by-district-including-measures-on-existing-buildings.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -544,9 +561,9 @@ def convert_file_to_csv_by_district_including_measures_on_existing_buildings(sou
         print(f"✗️ Exception: {str(e)}")
 
 
-def convert_file_to_csv_by_district_new_buildings(source_file_path, clean, quiet):
+def convert_file_to_csv_completions_by_district_new_buildings(source_file_path, clean, quiet):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}-13-by-district-new-buildings.csv"
+    file_path_csv = f"{source_file_name}-13-completions-by-district-new-buildings.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -580,9 +597,9 @@ def convert_file_to_csv_by_district_new_buildings(source_file_path, clean, quiet
         print(f"✗️ Exception: {str(e)}")
 
 
-def convert_file_to_csv_by_district_new_buildings_with_1_or_2_apartments(source_file_path, clean, quiet):
+def convert_file_to_csv_completions_by_district_new_buildings_with_1_or_2_apartments(source_file_path, clean, quiet):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}-14-by-district-new-buildings-with-1-or-2-apartments.csv"
+    file_path_csv = f"{source_file_name}-14-completions-by-district-new-buildings-with-1-or-2-apartments.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -617,9 +634,9 @@ def convert_file_to_csv_by_district_new_buildings_with_1_or_2_apartments(source_
         print(f"✗️ Exception: {str(e)}")
 
 
-def convert_file_to_csv_by_district_new_non_residential_buildings(source_file_path, clean, quiet):
+def convert_file_to_csv_completions_by_district_new_non_residential_buildings(source_file_path, clean, quiet):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}-15-by-district-new-non-residential-buildings.csv"
+    file_path_csv = f"{source_file_name}-15-completions-by-district-new-non-residential-buildings.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -675,7 +692,8 @@ def convert_file_to_csv_construction_backlog_housing_projects(source_file_path, 
                  "new_residential_buildings_not_yet_started", "expired_building_permits"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .dropna() \
@@ -725,7 +743,8 @@ def convert_file_to_csv_construction_backlog_apartments(source_file_path, clean=
                  ]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .dropna() \
@@ -774,7 +793,8 @@ def convert_file_to_csv_construction_backlog_non_residential_buildings(source_fi
                  "new_non_residential_buildings_not_yet_started", "expired_building_permits"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .dropna() \
@@ -823,7 +843,8 @@ def convert_file_to_csv_construction_outflow_of_residential_buildings(source_fil
         names = ["type", "buildings", "usage_area", "living_area", "apartments"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .dropna() \
@@ -865,7 +886,8 @@ def convert_file_to_csv_construction_outflow_of_residential_buildings_complete(s
         names = ["type", "buildings", "usage_area", "living_area", "apartments"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .dropna() \
@@ -907,7 +929,8 @@ def convert_file_to_csv_construction_outflow_of_non_residential_buildings(source
         names = ["type", "buildings", "usage_area", "living_area", "apartments"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .dropna() \
@@ -949,7 +972,8 @@ def convert_file_to_csv_construction_outflow_of_non_residential_buildings_comple
         names = ["type", "buildings", "usage_area", "living_area", "apartments"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .dropna() \
@@ -994,7 +1018,8 @@ def convert_file_to_csv_construction_outflow_of_all_buildings_complete(source_fi
                  "non_residential_buildings_usage_area"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .dropna() \
@@ -1955,8 +1980,8 @@ def build_type_index(row):
 def write_csv_file(dataframe, file_path, quiet):
     if dataframe.shape[0] > 0:
         dataframe.to_csv(file_path, index=False)
-    if not quiet:
-        print(f"✓ Convert {os.path.basename(file_path)}")
+        if not quiet:
+            print(f"✓ Convert {os.path.basename(file_path)}")
     else:
         if not quiet:
             print(dataframe.head())
