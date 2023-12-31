@@ -18,7 +18,8 @@ def convert_data_to_csv(source_path, results_path, clean=False, quiet=False):
                              (file_name.endswith(".xlsx") or file_name.endswith(".xls"))]:
             source_file_path = os.path.join(source_path, subdir, file_name)
 
-            convert_file_to_csv(source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_new_buildings(source_file_path, clean=clean, quiet=quiet)
+            convert_file_to_csv_buildings_including_existing(source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_by_type_and_contractor_including_measures_on_existing_buildings(
                 source_file_path, clean=clean, quiet=quiet)
             convert_file_to_csv_by_type_and_contractor(source_file_path, clean=clean, quiet=quiet)
@@ -51,9 +52,9 @@ def convert_data_to_csv(source_path, results_path, clean=False, quiet=False):
                 source_file_path, clean=clean, quiet=quiet)
 
 
-def convert_file_to_csv(source_file_path, clean=False, quiet=False):
+def convert_file_to_csv_new_buildings(source_file_path, clean=False, quiet=False):
     source_file_name, source_file_extension = os.path.splitext(source_file_path)
-    file_path_csv = f"{source_file_name}.csv"
+    file_path_csv = f"{source_file_name}-1-new-buildings.csv"
 
     # Check if result needs to be generated
     if not clean and os.path.exists(file_path_csv):
@@ -67,8 +68,6 @@ def convert_file_to_csv(source_file_path, clean=False, quiet=False):
     year = os.path.basename(source_file_name).split(sep="-")[-2]
 
     try:
-        dataframes = []
-
         # Iterate over sheets
         sheet = "Baufert. Tab. 1 u. 2"
         skiprows = 10
@@ -78,13 +77,33 @@ def convert_file_to_csv(source_file_path, clean=False, quiet=False):
                  "apartment_rooms", "total_costs"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  usecols=list(range(0, len(names))), names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna()
         dataframe = dataframe.loc[dataframe["year"] == int(year)].head(1)
-        dataframes.append(dataframe)
 
+        # Write csv file
+        write_csv_file(dataframe, file_path_csv, quiet)
+    except Exception as e:
+        print(f"✗️ Exception: {str(e)}")
+
+
+def convert_file_to_csv_buildings_including_existing(source_file_path, clean=False, quiet=False):
+    source_file_name, source_file_extension = os.path.splitext(source_file_path)
+    file_path_csv = f"{source_file_name}-2-including-measures-on-existing-buildings.csv"
+
+    # Check if result needs to be generated
+    if not clean and os.path.exists(file_path_csv):
+        if not quiet:
+            print(f"✓ Already exists {os.path.basename(file_path_csv)}")
+        return
+
+    # Determine engine
+    engine = build_engine(source_file_extension)
+
+    year = os.path.basename(source_file_name).split(sep="-")[-2]
+
+    try:
         sheet = "Baufert. Tab. 1 u. 2"
         skiprows = 33
         names = ["year", "building_completions_new", "building_completions_new_with_1_apartment",
@@ -93,15 +112,10 @@ def convert_file_to_csv(source_file_path, clean=False, quiet=False):
                  "building_completions_new_total_apartments", "building_completions_new_volume",
                  "building_completions_new_living_area", "building_completions_new_costs"]
         drop_columns = []
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  usecols=list(range(0, len(names))), names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna()
         dataframe = dataframe.loc[dataframe["year"] == int(year)].head(1)
-        dataframes.append(dataframe)
-
-        # Join dataframes
-        dataframe = pd.concat(dataframes, axis=1).drop(columns=["year"], errors="ignore")
 
         # Write csv file
         write_csv_file(dataframe, file_path_csv, quiet)
@@ -129,8 +143,7 @@ def convert_file_to_csv_by_type_and_contractor_including_measures_on_existing_bu
         names = ["type", "measures", "usage_area", "apartments", "living_area", "living_rooms", "estimated_costs"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  usecols=list(range(0, len(names))), names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
@@ -170,8 +183,7 @@ def convert_file_to_csv_by_type_and_contractor(source_file_path, clean=False, qu
                  "estimated_costs"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  usecols=list(range(0, len(names))), names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
@@ -211,8 +223,7 @@ def convert_file_to_csv_by_building_type_and_heating(source_file_path, clean=Fal
                  "single_room_heating", "without_heating"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  usecols=list(range(0, len(names))), names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
@@ -253,8 +264,7 @@ def convert_file_to_csv_by_primary_heating_energy(source_file_path, clean=False,
                  "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
         drop_columns = ["id"]
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  usecols=list(range(0, len(names))), names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
@@ -295,8 +305,7 @@ def convert_file_to_csv_by_secondary_heating_energy(source_file_path, clean=Fals
                  "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
         drop_columns = ["id"]
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  usecols=list(range(0, len(names))), names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
@@ -337,8 +346,7 @@ def convert_file_to_csv_by_primary_water_heating_energy(source_file_path, clean=
                  "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
         drop_columns = ["id"]
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  usecols=list(range(0, len(names))), names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
@@ -379,8 +387,7 @@ def convert_file_to_csv_by_secondary_water_heating_energy(source_file_path, clea
                  "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
         drop_columns = ["id"]
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  usecols=list(range(0, len(names))), names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
@@ -420,8 +427,7 @@ def convert_file_to_csv_by_type_and_predominant_building_material(source_file_pa
                  "aerated_concrete", "light_concrete", "wood", "other"]
         drop_columns = ["unit"]
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  usecols=list(range(0, len(names))), names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
@@ -463,8 +469,7 @@ def convert_file_to_csv_execution_time_by_type_and_contractor(source_file_path, 
                  "execution_time_above_36_months"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  usecols=list(range(0, len(names))), names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .fillna(0) \
@@ -522,8 +527,8 @@ def convert_file_to_csv_by_district_including_measures_on_existing_buildings(sou
         names = ["district_name", "buildings", "usage_area", "apartments", "apartments_usage_area", "estimated_costs"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  names=names, index_col=False) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .assign(district_id=lambda df: df["district_name"].apply(lambda row: build_district_id(row))) \
@@ -558,8 +563,8 @@ def convert_file_to_csv_by_district_new_buildings(source_file_path, clean, quiet
         names = ["district_name", "buildings", "usage_area", "apartments", "apartments_usage_area", "estimated_costs"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  names=names, index_col=False) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .assign(district_id=lambda df: df["district_name"].apply(lambda row: build_district_id(row))) \
@@ -595,8 +600,8 @@ def convert_file_to_csv_by_district_new_buildings_with_1_or_2_apartments(source_
                  "estimated_costs"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  names=names, index_col=False) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .assign(district_id=lambda df: df["district_name"].apply(lambda row: build_district_id(row))) \
@@ -632,8 +637,8 @@ def convert_file_to_csv_by_district_new_non_residential_buildings(source_file_pa
                  "estimated_costs"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  names=names, index_col=False) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
+                                  index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .assign(district_id=lambda df: df["district_name"].apply(lambda row: build_district_id(row))) \
@@ -670,8 +675,7 @@ def convert_file_to_csv_construction_backlog_housing_projects(source_file_path, 
                  "new_residential_buildings_not_yet_started", "expired_building_permits"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  usecols=list(range(0, len(names))), names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .dropna() \
@@ -721,8 +725,7 @@ def convert_file_to_csv_construction_backlog_apartments(source_file_path, clean=
                  ]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  usecols=list(range(0, len(names))), names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .dropna() \
@@ -771,8 +774,7 @@ def convert_file_to_csv_construction_backlog_non_residential_buildings(source_fi
                  "new_non_residential_buildings_not_yet_started", "expired_building_permits"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  usecols=list(range(0, len(names))), names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .dropna() \
@@ -821,8 +823,7 @@ def convert_file_to_csv_construction_outflow_of_residential_buildings(source_fil
         names = ["type", "buildings", "usage_area", "living_area", "apartments"]
         drop_columns = []
 
-        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                  usecols=list(range(0, len(names))), names=names) \
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .dropna() \
@@ -864,14 +865,13 @@ def convert_file_to_csv_construction_outflow_of_residential_buildings_complete(s
         names = ["type", "buildings", "usage_area", "living_area", "apartments"]
         drop_columns = []
 
-        dataframe = (pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                   usecols=list(range(0, len(names))), names=names) \
-                     .drop(columns=drop_columns, errors="ignore") \
-                     .replace("–", 0) \
-                     .dropna() \
-                     .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
-                     .assign(buildings=lambda df: df["buildings"].astype(int)) \
-                     .assign(apartments=lambda df: df["apartments"].astype(int)))
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .replace("–", 0) \
+            .dropna() \
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
+            .assign(buildings=lambda df: df["buildings"].astype(int)) \
+            .assign(apartments=lambda df: df["apartments"].astype(int))
 
         dataframe.reset_index(drop=True, inplace=True)
         dataframe = dataframe.assign(type_index=lambda df: df.index) \
@@ -907,14 +907,13 @@ def convert_file_to_csv_construction_outflow_of_non_residential_buildings(source
         names = ["type", "buildings", "usage_area", "living_area", "apartments"]
         drop_columns = []
 
-        dataframe = (pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                   usecols=list(range(0, len(names))), names=names) \
-                     .drop(columns=drop_columns, errors="ignore") \
-                     .replace("–", 0) \
-                     .dropna() \
-                     .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
-                     .assign(buildings=lambda df: df["buildings"].astype(int)) \
-                     .assign(apartments=lambda df: df["apartments"].astype(int)))
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .replace("–", 0) \
+            .dropna() \
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
+            .assign(buildings=lambda df: df["buildings"].astype(int)) \
+            .assign(apartments=lambda df: df["apartments"].astype(int))
 
         dataframe.reset_index(drop=True, inplace=True)
         dataframe = dataframe.assign(type_index=lambda df: df.index) \
@@ -950,14 +949,13 @@ def convert_file_to_csv_construction_outflow_of_non_residential_buildings_comple
         names = ["type", "buildings", "usage_area", "living_area", "apartments"]
         drop_columns = []
 
-        dataframe = (pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                   usecols=list(range(0, len(names))), names=names) \
-                     .drop(columns=drop_columns, errors="ignore") \
-                     .replace("–", 0) \
-                     .dropna() \
-                     .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
-                     .assign(buildings=lambda df: df["buildings"].astype(int)) \
-                     .assign(apartments=lambda df: df["apartments"].astype(int)))
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .replace("–", 0) \
+            .dropna() \
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
+            .assign(buildings=lambda df: df["buildings"].astype(int)) \
+            .assign(apartments=lambda df: df["apartments"].astype(int))
 
         dataframe.reset_index(drop=True, inplace=True)
         dataframe = dataframe.assign(type_index=lambda df: df.index) \
@@ -996,12 +994,11 @@ def convert_file_to_csv_construction_outflow_of_all_buildings_complete(source_fi
                  "non_residential_buildings_usage_area"]
         drop_columns = []
 
-        dataframe = (pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows,
-                                   usecols=list(range(0, len(names))), names=names)
-                     .drop(columns=drop_columns, errors="ignore")
-                     .replace("–", 0)
-                     .dropna()
-                     .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))))
+        dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names) \
+            .drop(columns=drop_columns, errors="ignore") \
+            .replace("–", 0) \
+            .dropna() \
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
 
         dataframe.reset_index(drop=True, inplace=True)
         dataframe = dataframe.assign(type_index=lambda df: df.index) \
