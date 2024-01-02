@@ -77,7 +77,7 @@ def convert_file_to_csv_completions_new_buildings(source_file_path, clean=False,
         names = ["year", "building_completion_total", "building_completion_residential_buildings",
                  "building_completion_non_residential_buildings",
                  "building_measure_on_existing_buildings", "usage_area", "living_area", "apartments",
-                 "apartment_rooms", "total_costs"]
+                 "apartment_rooms", "estimated_costs"]
         drop_columns = []
 
         dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
@@ -114,7 +114,8 @@ def convert_file_to_csv_completions_buildings_including_existing(source_file_pat
                  "building_completions_new_with_2_apartments",
                  "building_completions_new_with_3_or_more_apartment",
                  "building_completions_new_total_apartments", "building_completions_new_volume",
-                 "building_completions_new_living_area", "building_completions_new_costs"]
+                 "building_completions_new_living_area", "building_completions_new_estimated_costs",
+                 "apartments_in_new_non_residential_buildings"]
         drop_columns = []
         dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
                                   index_col=False) \
@@ -236,7 +237,8 @@ def convert_file_to_csv_completions_by_building_type_and_heating(source_file_pat
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
-            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
+            .assign(buildings=lambda df: df["buildings"].astype(int))
 
         dataframe.reset_index(drop=True, inplace=True)
         dataframe = dataframe.assign(type_index=lambda df: df.index) \
@@ -270,7 +272,7 @@ def convert_file_to_csv_completions_by_primary_heating_energy(source_file_path, 
         skiprows = 6
         names = ["id", "type", "buildings", "oil", "gas", "electricity", "district_heating", "geothermal_energy",
                  "environmental_thermal_energy", "solar_thermal_energy", "wood", "biogas_bio_methane",
-                 "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
+                 "other_bio_mass", "other_heating", "no_heating", "conventional_energy", "renewable_energy"]
         drop_columns = ["id"]
 
         dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
@@ -278,7 +280,22 @@ def convert_file_to_csv_completions_by_primary_heating_energy(source_file_path, 
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
-            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
+            .assign(buildings=lambda df: df["buildings"].astype(int)) \
+            .assign(oil=lambda df: df["oil"].astype(int)) \
+            .assign(gas=lambda df: df["gas"].astype(int)) \
+            .assign(electricity=lambda df: df["electricity"].astype(int)) \
+            .assign(district_heating=lambda df: df["district_heating"].astype(int)) \
+            .assign(geothermal_energy=lambda df: df["geothermal_energy"].astype(int)) \
+            .assign(environmental_thermal_energy=lambda df: df["environmental_thermal_energy"].astype(int)) \
+            .assign(solar_thermal_energy=lambda df: df["solar_thermal_energy"].astype(int)) \
+            .assign(wood=lambda df: df["wood"].astype(int)) \
+            .assign(biogas_bio_methane=lambda df: df["biogas_bio_methane"].astype(int)) \
+            .assign(other_bio_mass=lambda df: df["other_bio_mass"].astype(int)) \
+            .assign(other_heating=lambda df: df["other_heating"].astype(int)) \
+            .assign(no_heating=lambda df: df["no_heating"].astype(int)) \
+            .assign(conventional_energy=lambda df: df["conventional_energy"].astype(int)) \
+            .assign(renewable_energy=lambda df: df["renewable_energy"].astype(int))
 
         dataframe.reset_index(drop=True, inplace=True)
         dataframe = dataframe.assign(type_index=lambda df: df.index) \
@@ -312,7 +329,7 @@ def convert_file_to_csv_completions_by_secondary_heating_energy(source_file_path
         skiprows = 6
         names = ["id", "type", "buildings", "oil", "gas", "electricity", "district_heating", "geothermal_energy",
                  "environmental_thermal_energy", "solar_thermal_energy", "wood", "biogas_bio_methane",
-                 "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
+                 "other_bio_mass", "other_heating", "no_heating", "conventional_energy", "renewable_energy"]
         drop_columns = ["id"]
 
         dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
@@ -320,7 +337,22 @@ def convert_file_to_csv_completions_by_secondary_heating_energy(source_file_path
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
-            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
+            .assign(buildings=lambda df: df["buildings"].astype(int)) \
+            .assign(oil=lambda df: df["oil"].astype(int)) \
+            .assign(gas=lambda df: df["gas"].astype(int)) \
+            .assign(electricity=lambda df: df["electricity"].astype(int)) \
+            .assign(district_heating=lambda df: df["district_heating"].astype(int)) \
+            .assign(geothermal_energy=lambda df: df["geothermal_energy"].astype(int)) \
+            .assign(environmental_thermal_energy=lambda df: df["environmental_thermal_energy"].astype(int)) \
+            .assign(solar_thermal_energy=lambda df: df["solar_thermal_energy"].astype(int)) \
+            .assign(wood=lambda df: df["wood"].astype(int)) \
+            .assign(biogas_bio_methane=lambda df: df["biogas_bio_methane"].astype(int)) \
+            .assign(other_bio_mass=lambda df: df["other_bio_mass"].astype(int)) \
+            .assign(other_heating=lambda df: df["other_heating"].astype(int)) \
+            .assign(no_heating=lambda df: df["no_heating"].astype(int)) \
+            .assign(conventional_energy=lambda df: df["conventional_energy"].astype(int)) \
+            .assign(renewable_energy=lambda df: df["renewable_energy"].astype(int))
 
         dataframe.reset_index(drop=True, inplace=True)
         dataframe = dataframe.assign(type_index=lambda df: df.index) \
@@ -354,7 +386,7 @@ def convert_file_to_csv_completions_by_primary_water_heating_energy(source_file_
         skiprows = 6
         names = ["id", "type", "buildings", "oil", "gas", "electricity", "district_heating", "geothermal_energy",
                  "environmental_thermal_energy", "solar_thermal_energy", "wood", "biogas_bio_methane",
-                 "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
+                 "other_bio_mass", "other_heating", "no_heating", "conventional_energy", "renewable_energy"]
         drop_columns = ["id"]
 
         dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
@@ -362,7 +394,22 @@ def convert_file_to_csv_completions_by_primary_water_heating_energy(source_file_
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
-            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
+            .assign(buildings=lambda df: df["buildings"].astype(int)) \
+            .assign(oil=lambda df: df["oil"].astype(int)) \
+            .assign(gas=lambda df: df["gas"].astype(int)) \
+            .assign(electricity=lambda df: df["electricity"].astype(int)) \
+            .assign(district_heating=lambda df: df["district_heating"].astype(int)) \
+            .assign(geothermal_energy=lambda df: df["geothermal_energy"].astype(int)) \
+            .assign(environmental_thermal_energy=lambda df: df["environmental_thermal_energy"].astype(int)) \
+            .assign(solar_thermal_energy=lambda df: df["solar_thermal_energy"].astype(int)) \
+            .assign(wood=lambda df: df["wood"].astype(int)) \
+            .assign(biogas_bio_methane=lambda df: df["biogas_bio_methane"].astype(int)) \
+            .assign(other_bio_mass=lambda df: df["other_bio_mass"].astype(int)) \
+            .assign(other_heating=lambda df: df["other_heating"].astype(int)) \
+            .assign(no_heating=lambda df: df["no_heating"].astype(int)) \
+            .assign(conventional_energy=lambda df: df["conventional_energy"].astype(int)) \
+            .assign(renewable_energy=lambda df: df["renewable_energy"].astype(int))
 
         dataframe.reset_index(drop=True, inplace=True)
         dataframe = dataframe.assign(type_index=lambda df: df.index) \
@@ -396,7 +443,7 @@ def convert_file_to_csv_completions_by_secondary_water_heating_energy(source_fil
         skiprows = 6
         names = ["id", "type", "buildings", "oil", "gas", "electricity", "district_heating", "geothermal_energy",
                  "environmental_thermal_energy", "solar_thermal_energy", "wood", "biogas_bio_methane",
-                 "other_bio_mass", "other_heating", "no_heating", "convential_energy", "renewable_energy"]
+                 "other_bio_mass", "other_heating", "no_heating", "conventional_energy", "renewable_energy"]
         drop_columns = ["id"]
 
         dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
@@ -404,7 +451,22 @@ def convert_file_to_csv_completions_by_secondary_water_heating_energy(source_fil
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
-            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
+            .assign(buildings=lambda df: df["buildings"].astype(int)) \
+            .assign(oil=lambda df: df["oil"].astype(int)) \
+            .assign(gas=lambda df: df["gas"].astype(int)) \
+            .assign(electricity=lambda df: df["electricity"].astype(int)) \
+            .assign(district_heating=lambda df: df["district_heating"].astype(int)) \
+            .assign(geothermal_energy=lambda df: df["geothermal_energy"].astype(int)) \
+            .assign(environmental_thermal_energy=lambda df: df["environmental_thermal_energy"].astype(int)) \
+            .assign(solar_thermal_energy=lambda df: df["solar_thermal_energy"].astype(int)) \
+            .assign(wood=lambda df: df["wood"].astype(int)) \
+            .assign(biogas_bio_methane=lambda df: df["biogas_bio_methane"].astype(int)) \
+            .assign(other_bio_mass=lambda df: df["other_bio_mass"].astype(int)) \
+            .assign(other_heating=lambda df: df["other_heating"].astype(int)) \
+            .assign(no_heating=lambda df: df["no_heating"].astype(int)) \
+            .assign(conventional_energy=lambda df: df["conventional_energy"].astype(int)) \
+            .assign(renewable_energy=lambda df: df["renewable_energy"].astype(int))
 
         dataframe.reset_index(drop=True, inplace=True)
         dataframe = dataframe.assign(type_index=lambda df: df.index) \
@@ -446,7 +508,8 @@ def convert_file_to_csv_completions_by_type_and_predominant_building_material(so
             .drop(columns=drop_columns, errors="ignore") \
             .dropna() \
             .replace("–", 0) \
-            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
+            .assign(buildings=lambda df: df["buildings"].astype(int))
 
         dataframe.reset_index(drop=True, inplace=True)
         dataframe = dataframe.assign(type_index=lambda df: df.index) \
@@ -478,7 +541,7 @@ def convert_file_to_csv_completions_by_execution_time(source_file_path, clean=Fa
     try:
         sheet = "Baufert. Tab. 11"
         skiprows = 8
-        names = ["type", "unit", "total", "execution_time_between_6_12_months",
+        names = ["type", "unit", "buildings", "execution_time_between_6_12_months",
                  "execution_time_between_12_18_months", "execution_time_between_18_24_months",
                  "execution_time_between_24_30_months", "execution_time_between_30_36_months",
                  "execution_time_above_36_months"]
@@ -491,7 +554,7 @@ def convert_file_to_csv_completions_by_execution_time(source_file_path, clean=Fa
             .fillna(0) \
             .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
             .assign(unit=lambda df: df["unit"].apply(lambda row: build_unit_name(row))) \
-            .assign(total=lambda df: df["total"].astype(int)) \
+            .assign(buildings=lambda df: df["buildings"].astype(int)) \
             .assign(
             execution_time_between_6_12_months=lambda df: df["execution_time_between_6_12_months"].astype(int)) \
             .assign(
@@ -504,7 +567,7 @@ def convert_file_to_csv_completions_by_execution_time(source_file_path, clean=Fa
             execution_time_between_30_36_months=lambda df: df["execution_time_between_30_36_months"].astype(int)) \
             .assign(execution_time_above_36_months=lambda df: df["execution_time_above_36_months"].astype(int))
 
-        dataframe = dataframe[dataframe["total"] != 0.0]
+        dataframe = dataframe[dataframe["buildings"] != 0.0]
         dataframe = dataframe[dataframe["type"] != "davon"]
         dataframe = dataframe[dataframe["type"] != "darunter"]
 
@@ -687,9 +750,13 @@ def convert_file_to_csv_construction_backlog_housing_projects(source_file_path, 
     try:
         sheet = "BAUÜB Tab. 16"
         skiprows = 7
-        names = ["type", "backlog_total", "new_residential_buildings_backlog",
-                 "new_residential_buildings_under_roof", "new_residential_buildings_not_yet_under_roof",
-                 "new_residential_buildings_not_yet_started", "expired_building_permits"]
+        names = ["type",
+                 "backlog_total",
+                 "backlog_new_buildings",
+                 "backlog_new_buildings_under_roof",
+                 "backlog_new_buildings_not_yet_under_roof",
+                 "backlog_new_buildings_not_yet_started",
+                 "expired_building_permits"]
         drop_columns = []
 
         dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
@@ -698,13 +765,13 @@ def convert_file_to_csv_construction_backlog_housing_projects(source_file_path, 
             .replace("–", 0) \
             .dropna() \
             .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
-            .assign(new_residential_buildings_backlog=lambda df: df["new_residential_buildings_backlog"].astype(int)) \
-            .assign(new_residential_buildings_under_roof=
-                    lambda df: df["new_residential_buildings_under_roof"].astype(int)) \
-            .assign(new_residential_buildings_not_yet_under_roof=
-                    lambda df: df["new_residential_buildings_not_yet_under_roof"].astype(int)) \
-            .assign(new_residential_buildings_not_yet_started=
-                    lambda df: df["new_residential_buildings_not_yet_started"].astype(int)) \
+            .assign(backlog_total=lambda df: df["backlog_total"].astype(int)) \
+            .assign(backlog_new_buildings=lambda df: df["backlog_new_buildings"].astype(int)) \
+            .assign(backlog_new_buildings_under_roof=lambda df: df["backlog_new_buildings_under_roof"].astype(int)) \
+            .assign(backlog_new_buildings_not_yet_under_roof=
+                    lambda df: df["backlog_new_buildings_not_yet_under_roof"].astype(int)) \
+            .assign(backlog_new_buildings_not_yet_started=
+                    lambda df: df["backlog_new_buildings_not_yet_started"].astype(int)) \
             .assign(expired_building_permits=lambda df: df["expired_building_permits"].astype(int))
 
         dataframe.reset_index(drop=True, inplace=True)
@@ -737,10 +804,13 @@ def convert_file_to_csv_construction_backlog_apartments(source_file_path, clean=
     try:
         sheet = "BAUÜB Tab.  17 "
         skiprows = 7
-        names = ["type", "backlog_total", "new_residential_buildings_backlog",
-                 "new_residential_buildings_under_roof", "new_residential_buildings_not_yet_under_roof",
-                 "new_residential_buildings_not_yet_started", "expired_building_permits"
-                 ]
+        names = ["type",
+                 "backlog_total",
+                 "backlog_new_buildings",
+                 "backlog_new_buildings_under_roof",
+                 "backlog_new_buildings_not_yet_under_roof",
+                 "backlog_new_buildings_not_yet_started",
+                 "expired_building_permits"]
         drop_columns = []
 
         dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
@@ -749,13 +819,13 @@ def convert_file_to_csv_construction_backlog_apartments(source_file_path, clean=
             .replace("–", 0) \
             .dropna() \
             .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
-            .assign(new_residential_buildings_backlog=lambda df: df["new_residential_buildings_backlog"].astype(int)) \
-            .assign(new_residential_buildings_under_roof=
-                    lambda df: df["new_residential_buildings_under_roof"].astype(int)) \
-            .assign(new_residential_buildings_not_yet_under_roof=
-                    lambda df: df["new_residential_buildings_not_yet_under_roof"].astype(int)) \
-            .assign(new_residential_buildings_not_yet_started=
-                    lambda df: df["new_residential_buildings_not_yet_started"].astype(int)) \
+            .assign(backlog_total=lambda df: df["backlog_total"].astype(int)) \
+            .assign(backlog_new_buildings=lambda df: df["backlog_new_buildings"].astype(int)) \
+            .assign(backlog_new_buildings_under_roof=lambda df: df["backlog_new_buildings_under_roof"].astype(int)) \
+            .assign(backlog_new_buildings_not_yet_under_roof=
+                    lambda df: df["backlog_new_buildings_not_yet_under_roof"].astype(int)) \
+            .assign(backlog_new_buildings_not_yet_started=
+                    lambda df: df["backlog_new_buildings_not_yet_started"].astype(int)) \
             .assign(expired_building_permits=lambda df: df["expired_building_permits"].astype(int))
 
         dataframe.reset_index(drop=True, inplace=True)
@@ -788,9 +858,13 @@ def convert_file_to_csv_construction_backlog_non_residential_buildings(source_fi
     try:
         sheet = "BAUÜB Tab.  18"
         skiprows = 7
-        names = ["type", "backlog_total", "new_non_residential_buildings_backlog",
-                 "new_non_residential_buildings_under_roof", "new_non_residential_buildings_not_yet_under_roof",
-                 "new_non_residential_buildings_not_yet_started", "expired_building_permits"]
+        names = ["type",
+                 "backlog_total",
+                 "backlog_new_buildings",
+                 "backlog_new_buildings_under_roof",
+                 "backlog_new_buildings_not_yet_under_roof",
+                 "backlog_new_buildings_not_yet_started",
+                 "expired_building_permits"]
         drop_columns = []
 
         dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
@@ -800,14 +874,12 @@ def convert_file_to_csv_construction_backlog_non_residential_buildings(source_fi
             .dropna() \
             .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
             .assign(backlog_total=lambda df: df["backlog_total"].astype(int)) \
-            .assign(new_non_residential_buildings_backlog=
-                    lambda df: df["new_non_residential_buildings_backlog"].astype(int)) \
-            .assign(new_non_residential_buildings_under_roof=
-                    lambda df: df["new_non_residential_buildings_under_roof"].astype(int)) \
-            .assign(new_non_residential_buildings_not_yet_under_roof=
-                    lambda df: df["new_non_residential_buildings_not_yet_under_roof"].astype(int)) \
-            .assign(new_non_residential_buildings_not_yet_started=
-                    lambda df: df["new_non_residential_buildings_not_yet_started"].astype(int)) \
+            .assign(backlog_new_buildings=lambda df: df["backlog_new_buildings"].astype(int)) \
+            .assign(backlog_new_buildings_under_roof=lambda df: df["backlog_new_buildings_under_roof"].astype(int)) \
+            .assign(backlog_new_buildings_not_yet_under_roof=
+                    lambda df: df["backlog_new_buildings_not_yet_under_roof"].astype(int)) \
+            .assign(backlog_new_buildings_not_yet_started=
+                    lambda df: df["backlog_new_buildings_not_yet_started"].astype(int)) \
             .assign(expired_building_permits=lambda df: df["expired_building_permits"].astype(int))
 
         dataframe.reset_index(drop=True, inplace=True)
@@ -1023,7 +1095,10 @@ def convert_file_to_csv_construction_outflow_of_all_buildings_complete(source_fi
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
             .dropna() \
-            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row)))
+            .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
+            .assign(residential_buildings=lambda df: df["residential_buildings"].astype(int)) \
+            .assign(residential_buildings_apartments=lambda df: df["residential_buildings_apartments"].astype(int)) \
+            .assign(non_residential_buildings=lambda df: df["non_residential_buildings"].astype(int)) \
 
         dataframe.reset_index(drop=True, inplace=True)
         dataframe = dataframe.assign(type_index=lambda df: df.index) \
