@@ -1,0 +1,34 @@
+type_index,type_parent_index,type,backlog_total,backlog_new_buildings,backlog_new_buildings_under_roof,backlog_new_buildings_not_yet_under_roof,backlog_new_buildings_not_yet_started,expired_building_permits
+0,-1,residential_buildings,8916,5227,1710,1384,2133,287
+1,0,residential_buildings_with_1_apartment,x,2533,790,616,1127,175
+2,0,residential_buildings_with_2_apartments,x,225,62,61,102,14
+3,0,residential_buildings_with_3_or_more_apartments,x,2434,852,697,885,97
+4,0,dormitories,58,35,6,10,19,1
+5,0,residential_buildings_with_condominium,1854,895,295,308,292,42
+6,0,public_builders,498,398,192,127,79,2
+7,0,companies,4626,3001,891,790,1320,232
+8,7,housing_companies,3397,2240,663,645,932,192
+9,7,real_estate_funds,394,194,47,27,120,6
+10,7,agriculture_forestry_animal_husbandry_fishing,1,1,1,0,0,0
+11,7,manufacturing_industry,87,81,38,11,32,1
+12,7,trade_banking_services_insurance_transport_and_communications,747,485,142,107,236,33
+13,1,private_households,3724,1806,621,463,722,49
+14,1,non_profit_organizations,68,22,6,4,12,4
+15,1,2020 half-year 2,1328,811,20,75,716,0
+16,1,2020 half-year 1,1433,979,196,376,407,4
+17,1,2019 half-year 2,1254,771,254,257,260,8
+18,1,2019 half-year 1,1031,620,237,190,193,8
+19,1,2018,1591,882,367,275,240,43
+20,1,2017 and earlier,2279,1164,636,211,317,224
+21,1,Mitte,638,257,70,95,92,18
+22,1,Friedrichshain-Kreuzberg,435,110,20,59,31,8
+23,1,Pankow,1246,676,239,176,261,47
+24,1,Charlottenburg-Wilmersdorf,588,209,75,60,74,4
+25,1,Spandau,714,519,161,139,219,20
+26,1,Steglitz-Zehlendorf,780,290,67,129,94,10
+27,1,Tempelhof-Schöneberg,623,312,112,106,94,5
+28,1,Neukölln,453,222,67,46,109,4
+29,1,Treptow-Köpenick,1310,1000,311,281,408,35
+30,1,Marzahn-Hellersdorf,959,827,315,148,364,12
+31,1,Lichtenberg,698,576,181,81,314,122
+32,1,Reinickendorf,472,229,92,64,73,2

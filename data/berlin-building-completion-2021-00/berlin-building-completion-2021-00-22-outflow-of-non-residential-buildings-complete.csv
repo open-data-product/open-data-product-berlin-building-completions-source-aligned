@@ -1,0 +1,28 @@
+type_index,type_parent_index,type,buildings,usage_area,living_area,apartments
+0,-1,non_residential_buildings,115,218.8,2.7,30
+1,0,institution_buildings,2,6.1,0.0,0
+2,0,office_and_administration_buildings,25,98.2,1.5,21
+3,0,agricultural_buildings,5,2.3,0.0,0
+4,0,non_agricultural_buildings,65,69.1,1.2,9
+5,4,factory_and_workshop_buildings,16,9.0,0.5,3
+6,4,commercial_buildings,15,19.1,0.2,1
+7,4,warehouse_buildings,13,19.7,0.0,0
+8,4,hotels_and_restaurants,9,15.1,0.4,4
+9,0,other_non_residential_buildings,18,43.1,0.0,0
+10,0,public_builders,14,41.1,0.0,0
+11,0,companies,73,155.8,2.5,28
+12,11,housing_companies,38,58.9,0.1,2
+13,11,real_estate_funds,7,35.4,0.8,5
+14,11,agriculture_forestry_animal_husbandry_fishing,0,0.0,0.0,0
+15,11,manufacturing_industry,4,1.1,0.1,1
+16,11,trade_banking_services_insurance_transport_and_communications,24,60.4,1.5,20
+17,0,private_households,21,9.8,0.2,2
+18,0,non_profit_organisations,7,12.0,0.0,0
+19,0,before 1919,7,16.4,0.0,0
+20,0,between 1919 and 1948,12,7.7,0.0,0
+21,0,between 1949 and 1978,57,124.9,1.9,22
+22,0,between 1979 and 1986,18,43.3,0.1,1
+23,0,between 1987 and 1990,7,3.2,0.1,2
+24,0,between 1991 and 1995,6,17.2,0.6,5
+25,0,between 1996 and 2010,7,5.6,0.0,0
+26,0,2011 and later,1,0.5,0.0,0

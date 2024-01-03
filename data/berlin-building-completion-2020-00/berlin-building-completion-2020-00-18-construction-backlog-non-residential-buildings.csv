@@ -1,0 +1,38 @@
+type_index,type_parent_index,type,backlog_total,backlog_new_buildings,backlog_new_buildings_under_roof,backlog_new_buildings_not_yet_under_roof,backlog_new_buildings_not_yet_started,expired_building_permits
+0,-1,non_residential_buildings,1178,773,249,226,298,24
+1,0,institution_buildings,34,17,4,5,8,0
+2,0,office_and_administration_buildings,359,215,69,61,85,5
+3,0,agricultural_buildings,4,4,2,0,2,0
+4,3,non_agricultural_buildings,472,337,120,73,144,18
+5,3,factory_and_workshop_buildings,122,90,32,17,41,3
+6,3,commercial_buildings,91,48,13,13,22,4
+7,3,warehouse_buildings,63,48,20,6,22,4
+8,3,hotels_and_restaurants,106,70,22,15,33,3
+9,0,other_non_residential_buildings,309,200,54,87,59,1
+10,0,public_builders,207,145,43,60,42,0
+11,0,companies,758,517,181,129,207,19
+12,11,housing_companies,154,121,39,43,39,4
+13,11,real_estate_funds,69,40,14,9,17,3
+14,11,agriculture_forestry_animal_husbandry_fishing,7,6,4,1,1,0
+15,11,manufacturing_industry,93,60,24,13,23,2
+16,11,trade_banking_services_insurance_transport_and_communications,435,290,100,63,127,10
+17,0,private_households,92,40,5,11,24,4
+18,0,non_profit_organizations,121,71,20,26,25,1
+19,0,2020 half-year 2,172,115,1,13,101,0
+20,0,2020 half-year 1,191,128,12,41,75,2
+21,0,2019 half-year 2,148,107,22,48,37,0
+22,0,2019 half-year 1,158,114,43,54,17,2
+23,0,2018,209,132,60,37,35,3
+24,0,2017 and earlier,300,177,111,33,33,17
+25,0,Mitte,155,102,38,33,31,4
+26,0,Friedrichshain-Kreuzberg,88,58,22,18,18,2
+27,0,Pankow,108,72,19,27,26,3
+28,0,Charlottenburg-Wilmersdorf,124,68,25,15,28,2
+29,0,Spandau,87,65,17,23,25,2
+30,0,Steglitz-Zehlendorf,78,44,9,15,20,2
+31,0,Tempelhof-Schöneberg,86,56,26,12,18,1
+32,0,Neukölln,72,43,9,18,16,0
+33,0,Treptow-Köpenick,123,91,23,28,40,4
+34,0,Marzahn-Hellersdorf,87,65,24,13,28,1
+35,0,Lichtenberg,106,77,25,19,33,3
+36,0,Reinickendorf,64,32,12,5,15,0
