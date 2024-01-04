@@ -7,24 +7,24 @@ metadata:
   - schema:
       # 1 completions new buildings
       - year: year
-      - building_completion_total: number of building completions
-      - building_completion_residential_buildings: number of building completions (residential buildings)
-      - building_completion_non_residential_buildings: number of building completions (non-residential buildings)
-      - building_measure_on_existing_buildings: number of building measures in existing buildings
+      - buildings: number of building completions
+      - residential_buildings: number of building completions (residential buildings)
+      - non_residential_buildings: number of building completions (non-residential buildings)
+      - building_measures_on_existing_buildings: number of building measures in existing buildings
       - usage_area: building completions usage area in 100sqm
       - living_area: building completions living area 100sqm
       - apartments: number of apartments
       - apartment_rooms: number of living rooms
       - estimated_costs: estimated costs
       # 2 completions including measures on existing buildings
-      - building_completions_new: number of new building completions
-      - building_completions_new_with_1_apartment: number of new building completions with 1 apartment
-      - building_completions_new_with_2_apartments: number of new building completions with 2 apartments
-      - building_completions_new_with_3_or_more_apartment: number of new building completions with 3 or more apartments
-      - building_completions_new_total_apartments: number of
-      - building_completions_new_volume: volume of apartments in 1000qm
-      - building_completions_new_living_area: living area in 100sqm
-      - building_completions_new_estimated_costs: estimated costs
+      - buildings: number of building completions
+      - buildings_with_1_apartment: number of building completions with 1 apartment
+      - buildings_with_2_apartments: number of building completions with 2 apartments
+      - buildings_with_3_or_more_apartments: number of building completions with 3 or more apartments
+      - apartments: number of apartments
+      - volume: volume of apartments in 1000qm
+      - living_area: living area in 100sqm
+      - estimated_costs: estimated costs
       - apartments_in_new_non_residential_buildings: apartments in new non-residential buildings
       # 3 completions by type and constructor including measures on existing buildings
       # 4 completions by type and constructor
@@ -79,14 +79,16 @@ metadata:
       - type: type
       - unit: unit
       - buildings: number of buildings
-      - execution_time_between_6_12_months:  execution time between 6 12 months
+      - execution_time_below_6_months:  execution time below 6 months
+      - execution_time_between_6_12_months:  execution time between 6 and 12 months
       - execution_time_between_12_18_months: execution time between 12 and 18 months
       - execution_time_between_18_24_months: execution time between 18 and 24 months
       - execution_time_between_24_30_months: execution time between 24 and 30 months
       - execution_time_between_30_36_months: execution time between 30 and 36 months
       - execution_time_above_36_months: execution time above 36 months
+      - average_execution_time: average execution time
       # 12 completions by district including measures on existing buildings
-      # 13 completions by districts new buildings
+      # 13 completions by district new buildings
       - buildings: number of buildings
       - usage_area: buildings usage area in 100sqm
       - apartments: number of apartments
@@ -98,7 +100,7 @@ metadata:
       - volume: buildings volume in 1000qm
       - usage_area: buildings usage are in 100sqm
       - apartments: number of apartments
-      - apartments_usage_area: apartments usage are in 100sqm
+      - apartments_usage_area: apartments usage area in 100sqm
       - estimated_costs: estimated costs
       # 16 construction backlog housing projects
       # 17 construction backlog apartments
@@ -128,7 +130,7 @@ metadata:
       - non_residential_buildings_usage_area: usage area non-residential buildings
 description:
 input_ports:
-  - id: berlin-building-completion-2022-00
+  - id: berlin-building-completions-2022-00
     metadata:
       name: Baufertigstellungen, Bauüberhang und Bauabgang in Berlin 2022
       author: Amt für Statistik Berlin-Brandenburg
@@ -137,7 +139,7 @@ input_ports:
       updated: 2023-06-09
     files:
       - https://download.statistik-berlin-brandenburg.de/2bd07d614def86bb/6dba9f3eaa0a/SB_F02-02-00_2022j01_BE.xlsx
-  - id: berlin-building-completion-2021-00
+  - id: berlin-building-completions-2021-00
     metadata:
       name: Baufertigstellungen, Bauüberhang und Bauabgang in Berlin 2021
       author: Amt für Statistik Berlin-Brandenburg
@@ -146,7 +148,7 @@ input_ports:
       updated: 2022-06-09
     files:
       - https://download.statistik-berlin-brandenburg.de/d712acdbe5af5c59/885f96bb0c20/SB_F02-02-00_2021j01_BE.xlsx
-  - id: berlin-building-completion-2020-00
+  - id: berlin-building-completions-2020-00
     metadata:
       name: Baufertigstellungen, Bauüberhang und Bauabgang in Berlin 2020
       author: Amt für Statistik Berlin-Brandenburg
@@ -156,85 +158,85 @@ input_ports:
     files:
       - https://download.statistik-berlin-brandenburg.de/629351f64cf37f48/60bed0ed87bb/SB_F02-02-00_2020j01_BE.xlsx
 output_ports:
-  - id: berlin-building-completion
+  - id: berlin-building-completions
     metadata:
-      name: Berlin LOR population
+      name: Berlin building completions
       author: Open Lifeworlds
       url: https://github.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/tree/main/data
       license: CC-BY-4.0
       updated: 2024-01-01
     files:
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-1-completions-new-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-2-completions-including-measures-on-existing-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-3-completions-by-type-and-constructor-including-measures-on-existing-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-4-completions-by-type-and-constructor.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-5-completions-by-building-type-and-heating.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-6-completions-by-primary-heating-energy.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-7-completions-by-secondary-heating-energy.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-8-completions-by-primary-water-heating-energy.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-9-completions-by-secondary-water-heating-energy.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-10-completions-by-type-and-predominant-building-material.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-11-completions-by-execution.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-12-completions-by-district-including-measures-on-existing-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-13-completions-by-district-new-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-14-completions-by-district-new-buildings-with-1-or-2-apartments.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-15-completions-by-district-new-non-residential-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-16-construction-backlog-housing-projects.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-17-construction-backlog-apartments.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-18-construction-backlog-non-residential-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-19-outflow-of-residential-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-20-outflow-of-residential-buildings-complete.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-21-outflow-of-non-residential-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-22-outflow-of-non-residential-buildings-complete.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2020-00/berlin-building-completion-2020-00-23-outflow-of-all-buildings-complete.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-1-completions-new-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-2-completions-including-measures-on-existing-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-3-completions-by-type-and-constructor-including-measures-on-existing-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-4-completions-by-type-and-constructor.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-5-completions-by-building-type-and-heating.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-6-completions-by-primary-heating-energy.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-7-completions-by-secondary-heating-energy.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-8-completions-by-primary-water-heating-energy.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-9-completions-by-secondary-water-heating-energy.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-10-completions-by-type-and-predominant-building-material.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-11-completions-by-execution.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-12-completions-by-district-including-measures-on-existing-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-13-completions-by-district-new-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-14-completions-by-district-new-buildings-with-1-or-2-apartments.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-15-completions-by-district-new-non-residential-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-16-construction-backlog-housing-projects.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-17-construction-backlog-apartments.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-18-construction-backlog-non-residential-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-19-outflow-of-residential-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-20-outflow-of-residential-buildings-complete.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-21-outflow-of-non-residential-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-22-outflow-of-non-residential-buildings-complete.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2020-00/berlin-building-completions-2020-00-23-outflow-of-all-buildings-complete.csv
 
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-1-completions-new-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-2-completions-including-measures-on-existing-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-3-completions-by-type-and-constructor-including-measures-on-existing-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-4-completions-by-type-and-constructor.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-5-completions-by-building-type-and-heating.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-6-completions-by-primary-heating-energy.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-7-completions-by-secondary-heating-energy.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-8-completions-by-primary-water-heating-energy.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-9-completions-by-secondary-water-heating-energy.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-10-completions-by-type-and-predominant-building-material.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-11-completions-by-execution.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-12-completions-by-district-including-measures-on-existing-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-13-completions-by-district-new-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-14-completions-by-district-new-buildings-with-1-or-2-apartments.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-15-completions-by-district-new-non-residential-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-16-construction-backlog-housing-projects.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-17-construction-backlog-apartments.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-18-construction-backlog-non-residential-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-19-outflow-of-residential-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-20-outflow-of-residential-buildings-complete.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-21-outflow-of-non-residential-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-22-outflow-of-non-residential-buildings-complete.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2021-00/berlin-building-completion-2021-00-23-outflow-of-all-buildings-complete.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-1-completions-new-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-2-completions-including-measures-on-existing-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-3-completions-by-type-and-constructor-including-measures-on-existing-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-4-completions-by-type-and-constructor.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-5-completions-by-building-type-and-heating.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-6-completions-by-primary-heating-energy.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-7-completions-by-secondary-heating-energy.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-8-completions-by-primary-water-heating-energy.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-9-completions-by-secondary-water-heating-energy.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-10-completions-by-type-and-predominant-building-material.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-11-completions-by-execution.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-12-completions-by-district-including-measures-on-existing-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-13-completions-by-district-new-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-14-completions-by-district-new-buildings-with-1-or-2-apartments.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-15-completions-by-district-new-non-residential-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-16-construction-backlog-housing-projects.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-17-construction-backlog-apartments.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-18-construction-backlog-non-residential-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-19-outflow-of-residential-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-20-outflow-of-residential-buildings-complete.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-21-outflow-of-non-residential-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-22-outflow-of-non-residential-buildings-complete.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2021-00/berlin-building-completions-2021-00-23-outflow-of-all-buildings-complete.csv
 
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-1-completions-new-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-2-completions-including-measures-on-existing-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-3-completions-by-type-and-constructor-including-measures-on-existing-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-4-completions-by-type-and-constructor.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-5-completions-by-building-type-and-heating.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-6-completions-by-primary-heating-energy.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-7-completions-by-secondary-heating-energy.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-8-completions-by-primary-water-heating-energy.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-9-completions-by-secondary-water-heating-energy.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-10-completions-by-type-and-predominant-building-material.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-11-completions-by-execution.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-12-completions-by-district-including-measures-on-existing-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-13-completions-by-district-new-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-14-completions-by-district-new-buildings-with-1-or-2-apartments.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-15-completions-by-district-new-non-residential-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-16-construction-backlog-housing-projects.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-17-construction-backlog-apartments.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-18-construction-backlog-non-residential-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-19-outflow-of-residential-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-20-outflow-of-residential-buildings-complete.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-21-outflow-of-non-residential-buildings.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-22-outflow-of-non-residential-buildings-complete.csv
-      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completion-2022-00/berlin-building-completion-2022-00-23-outflow-of-all-buildings-complete.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-1-completions-new-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-2-completions-including-measures-on-existing-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-3-completions-by-type-and-constructor-including-measures-on-existing-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-4-completions-by-type-and-constructor.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-5-completions-by-building-type-and-heating.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-6-completions-by-primary-heating-energy.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-7-completions-by-secondary-heating-energy.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-8-completions-by-primary-water-heating-energy.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-9-completions-by-secondary-water-heating-energy.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-10-completions-by-type-and-predominant-building-material.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-11-completions-by-execution.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-12-completions-by-district-including-measures-on-existing-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-13-completions-by-district-new-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-14-completions-by-district-new-buildings-with-1-or-2-apartments.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-15-completions-by-district-new-non-residential-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-16-construction-backlog-housing-projects.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-17-construction-backlog-apartments.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-18-construction-backlog-non-residential-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-19-outflow-of-residential-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-20-outflow-of-residential-buildings-complete.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-21-outflow-of-non-residential-buildings.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-22-outflow-of-non-residential-buildings-complete.csv
+      - https://raw.githubusercontent.com/open-lifeworlds/open-lifeworlds-data-product-berlin-building-completions-source-aligned/main/data/berlin-building-completions-2022-00/berlin-building-completions-2022-00-23-outflow-of-all-buildings-complete.csv
 
 metrics:
   - quality:

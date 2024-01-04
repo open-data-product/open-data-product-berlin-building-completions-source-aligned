@@ -1,8 +1,8 @@
 type_index,type_parent_index,type,backlog_total,backlog_new_buildings,backlog_new_buildings_under_roof,backlog_new_buildings_not_yet_under_roof,backlog_new_buildings_not_yet_started,expired_building_permits
 0,-1,residential_buildings,65661,55990,17538,17439,21013,2308
-1,0,residential_buildings_with_1_apartment,x,2533,790,616,1127,175
-2,0,residential_buildings_with_2_apartments,x,450,124,122,204,28
-3,0,residential_buildings_with_3_or_more_apartments,x,49941,16083,15869,17989,2100
+1,0,residential_buildings_with_1_apartment,0,2533,790,616,1127,175
+2,0,residential_buildings_with_2_apartments,0,450,124,122,204,28
+3,0,residential_buildings_with_3_or_more_apartments,0,49941,16083,15869,17989,2100
 4,0,dormitories,3279,3066,541,832,1693,5
 5,0,residential_buildings_with_condominium,19980,16307,5048,6790,4469,535
 6,0,public_builders,10793,10326,3825,4131,2370,38

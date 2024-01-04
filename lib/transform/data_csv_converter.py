@@ -74,9 +74,8 @@ def convert_file_to_csv_completions_new_buildings(source_file_path, clean=False,
         # Iterate over sheets
         sheet = "Baufert. Tab. 1 u. 2"
         skiprows = 10
-        names = ["year", "building_completion_total", "building_completion_residential_buildings",
-                 "building_completion_non_residential_buildings",
-                 "building_measure_on_existing_buildings", "usage_area", "living_area", "apartments",
+        names = ["year", "buildings", "residential_buildings", "non_residential_buildings",
+                 "building_measures_on_existing_buildings", "usage_area", "living_area", "apartments",
                  "apartment_rooms", "estimated_costs"]
         drop_columns = []
 
@@ -84,7 +83,7 @@ def convert_file_to_csv_completions_new_buildings(source_file_path, clean=False,
                                   index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna()
-        dataframe = dataframe.loc[dataframe["year"] == int(year)].head(1)
+        dataframe = dataframe.loc[dataframe["year"] == int(year)].head(1).drop(columns=["years"], errors="ignore")
 
         # Write csv file
         write_csv_file(dataframe, file_path_csv, quiet)
@@ -110,18 +109,15 @@ def convert_file_to_csv_completions_buildings_including_existing(source_file_pat
     try:
         sheet = "Baufert. Tab. 1 u. 2"
         skiprows = 32
-        names = ["year", "building_completions_new", "building_completions_new_with_1_apartment",
-                 "building_completions_new_with_2_apartments",
-                 "building_completions_new_with_3_or_more_apartment",
-                 "building_completions_new_total_apartments", "building_completions_new_volume",
-                 "building_completions_new_living_area", "building_completions_new_estimated_costs",
+        names = ["year", "buildings", "buildings_with_1_apartment", "buildings_with_2_apartments",
+                 "buildings_with_3_or_more_apartments", "apartments", "volume", "living_area", "estimated_costs",
                  "apartments_in_new_non_residential_buildings"]
         drop_columns = []
         dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
                                   index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .dropna()
-        dataframe = dataframe.loc[dataframe["year"] == int(year)].head(1)
+        dataframe = dataframe.loc[dataframe["year"] == int(year)].head(1).drop(columns=["years"], errors="ignore")
 
         # Write csv file
         write_csv_file(dataframe, file_path_csv, quiet)
@@ -272,8 +268,8 @@ def convert_file_to_csv_completions_by_primary_heating_energy(source_file_path, 
         skiprows = 6
         names = ["id", "type", "buildings", "oil", "gas", "electricity", "district_heating", "geothermal_energy",
                  "environmental_thermal_energy", "solar_thermal_energy", "wood", "biogas_bio_methane",
-                 "other_bio_mass", "other_heating", "no_heating", "conventional_energy", "renewable_energy"]
-        drop_columns = ["id"]
+                 "other_bio_mass", "other_heating", "no_heating", "conventional_energy", "renewable_energy", "id2"]
+        drop_columns = ["id", "id2"]
 
         dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
                                   index_col=False) \
@@ -329,8 +325,8 @@ def convert_file_to_csv_completions_by_secondary_heating_energy(source_file_path
         skiprows = 6
         names = ["id", "type", "buildings", "oil", "gas", "electricity", "district_heating", "geothermal_energy",
                  "environmental_thermal_energy", "solar_thermal_energy", "wood", "biogas_bio_methane",
-                 "other_bio_mass", "other_heating", "no_heating", "conventional_energy", "renewable_energy"]
-        drop_columns = ["id"]
+                 "other_bio_mass", "other_heating", "no_heating", "conventional_energy", "renewable_energy", "id2"]
+        drop_columns = ["id", "id2"]
 
         dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
                                   index_col=False) \
@@ -382,12 +378,12 @@ def convert_file_to_csv_completions_by_primary_water_heating_energy(source_file_
     engine = build_engine(source_file_extension)
 
     try:
-        sheet = "Baufert. Tab. 7 "
+        sheet = "Baufert. Tab. 8 "
         skiprows = 6
         names = ["id", "type", "buildings", "oil", "gas", "electricity", "district_heating", "geothermal_energy",
                  "environmental_thermal_energy", "solar_thermal_energy", "wood", "biogas_bio_methane",
-                 "other_bio_mass", "other_heating", "no_heating", "conventional_energy", "renewable_energy"]
-        drop_columns = ["id"]
+                 "other_bio_mass", "other_heating", "no_heating", "conventional_energy", "renewable_energy", "id2"]
+        drop_columns = ["id", "id2"]
 
         dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
                                   index_col=False) \
@@ -443,8 +439,8 @@ def convert_file_to_csv_completions_by_secondary_water_heating_energy(source_fil
         skiprows = 6
         names = ["id", "type", "buildings", "oil", "gas", "electricity", "district_heating", "geothermal_energy",
                  "environmental_thermal_energy", "solar_thermal_energy", "wood", "biogas_bio_methane",
-                 "other_bio_mass", "other_heating", "no_heating", "conventional_energy", "renewable_energy"]
-        drop_columns = ["id"]
+                 "other_bio_mass", "other_heating", "no_heating", "conventional_energy", "renewable_energy", "id2"]
+        drop_columns = ["id", "id2"]
 
         dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
                                   index_col=False) \
@@ -541,10 +537,10 @@ def convert_file_to_csv_completions_by_execution_time(source_file_path, clean=Fa
     try:
         sheet = "Baufert. Tab. 11"
         skiprows = 8
-        names = ["type", "unit", "buildings", "execution_time_between_6_12_months",
+        names = ["type", "unit", "buildings", "execution_time_below_6_months", "execution_time_between_6_12_months",
                  "execution_time_between_12_18_months", "execution_time_between_18_24_months",
                  "execution_time_between_24_30_months", "execution_time_between_30_36_months",
-                 "execution_time_above_36_months"]
+                 "execution_time_above_36_months", "average_execution_time"]
         drop_columns = []
 
         dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
@@ -640,7 +636,8 @@ def convert_file_to_csv_completions_by_district_new_buildings(source_file_path, 
     try:
         sheet = "Baufert. Tab. 12 u. 13"
         skiprows = 30
-        names = ["district_name", "buildings", "usage_area", "apartments", "apartments_usage_area", "estimated_costs"]
+        names = ["district_name", "buildings", "volume", "usage_area", "apartments", "apartments_usage_area",
+                 "estimated_costs"]
         drop_columns = []
 
         dataframe = pd.read_excel(source_file_path, engine=engine, sheet_name=sheet, skiprows=skiprows, names=names,
@@ -763,6 +760,7 @@ def convert_file_to_csv_construction_backlog_housing_projects(source_file_path, 
                                   index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
+            .replace("x", 0) \
             .dropna() \
             .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
             .assign(backlog_total=lambda df: df["backlog_total"].astype(int)) \
@@ -817,6 +815,7 @@ def convert_file_to_csv_construction_backlog_apartments(source_file_path, clean=
                                   index_col=False) \
             .drop(columns=drop_columns, errors="ignore") \
             .replace("–", 0) \
+            .replace("x", 0) \
             .dropna() \
             .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
             .assign(backlog_total=lambda df: df["backlog_total"].astype(int)) \
@@ -1098,7 +1097,7 @@ def convert_file_to_csv_construction_outflow_of_all_buildings_complete(source_fi
             .assign(type=lambda df: df["type"].apply(lambda row: build_type_name(row))) \
             .assign(residential_buildings=lambda df: df["residential_buildings"].astype(int)) \
             .assign(residential_buildings_apartments=lambda df: df["residential_buildings_apartments"].astype(int)) \
-            .assign(non_residential_buildings=lambda df: df["non_residential_buildings"].astype(int)) \
+            .assign(non_residential_buildings=lambda df: df["non_residential_buildings"].astype(int))
 
         dataframe.reset_index(drop=True, inplace=True)
         dataframe = dataframe.assign(type_index=lambda df: df.index) \
