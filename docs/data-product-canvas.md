@@ -1,8 +1,4 @@
-# Data Product Canvas
-
-## Domain
-
-## Data Product Name
+# Data Product Canvas - Berlin Building Completions
 
 ## Input Ports
 
