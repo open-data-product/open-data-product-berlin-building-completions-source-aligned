@@ -1,0 +1,13 @@
+id,backlog_total,backlog_new_buildings,backlog_new_buildings_under_roof,backlog_new_buildings_not_yet_under_roof,backlog_new_buildings_not_yet_started,expired_building_permits
+01,155,102,38,33,31,4
+02,88,58,22,18,18,2
+03,108,72,19,27,26,3
+04,124,68,25,15,28,2
+05,87,65,17,23,25,2
+06,78,44,9,15,20,2
+07,86,56,26,12,18,1
+08,72,43,9,18,16,–
+09,123,91,23,28,40,4
+10,87,65,24,13,28,1
+11,106,77,25,19,33,3
+12,64,32,12,5,15,–

@@ -1,0 +1,13 @@
+district_name,backlog_total,backlog_new_buildings,backlog_new_buildings_under_roof,backlog_new_buildings_not_yet_under_roof,backlog_new_buildings_not_yet_started,expired_building_permits
+Mitte,8550,7476,2673,2112,2691,209
+Friedrichshain-Kreuzberg,4184,3337,947,1614,776,18
+Pankow,5382,4312,1300,1541,1471,630
+Charlottenburg-Wilmersdorf,4433,3436,1561,1014,861,90
+Spandau,5469,4760,1228,1880,1652,263
+Steglitz-Zehlendorf,2998,2019,779,721,519,31
+Tempelhof-Schöneberg,4255,3367,915,782,1670,3
+Neukölln,2699,2150,128,702,1320,16
+Treptow-Köpenick,10323,9272,2972,3127,3173,552
+Marzahn-Hellersdorf,6950,6694,3290,1213,2191,197
+Lichtenberg,7627,7230,1858,2402,2970,446
+Reinickendorf,2400,2083,755,808,520,143

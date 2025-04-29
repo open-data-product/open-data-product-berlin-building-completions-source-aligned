@@ -1,0 +1,37 @@
+type,buildings,volume,usage_area,apartments,living_area,living_rooms,estimated_costs
+Wohn- und Nichtwohngebäude,2050,9058,7744.1,14433,10165,39333,2774253
+Wohngebäude zusammen,1868,5065,1631.5,14134,10048.9,38870,1775631
+Wohngebäude mit 1 Wohnung,1094,734,251.8,1094,1518.5,5808,268039
+Wohngebäude mit 2 Wohnungen,79,78,32.3,158,158.6,639,26803
+Wohngebäude mit 3 o. m. Wohnungen,683,4083,1305.7,12010,8033.4,30523,1412090
+Wohnheime,12,170,41.8,872,338.5,1900,68699
+Wohngebäude mit Eigentumswohnungen,243,1619,560.2,4265,3123.8,10724,547802
+Öffentliche Bauherren,161,901,219.4,3347,1821,7922,332403
+Unternehmen,900,3259,1032.8,9245,6550.2,24734,1122650
+Wohnungsunternehmen,682,2516,821.1,7109,5033.4,18420,871213
+Immobilienfonds,26,89,19.5,197,159,589,32983
+"Land- und Forstw., Tierh., Fischerei",–,–,–,–,–,–,–
+Produzierendes Gewerbe,73,263,99.8,796,556.6,2631,87504
+"Handel, Kreditinst., Dienstleistung, Versicherung, Verkehr u. Nachr.überm.",119,391,92.5,1143,801.2,3094,130950
+Private Haushalte,804,891,376,1527,1647.1,6156,314594
+Organisationen ohne Erwerbszweck,3,14,3.3,15,30.7,58,5984
+Nichtwohngebäude,182,3993,6112.6,299,116.1,463,998622
+Anstaltsgebäude,3,69,86.2,147,29.8,147,23919
+Büro- und Verwaltungsgebäude,45,1069,1885.1,105,51.9,201,450930
+Landwirtschaftliche Betriebsgebäude,–,–,–,–,–,–,–
+Nichtlandwirtschaftliche Betriebsgebäude,80,2481,3497.3,35,24.7,84,358906
+Fabrik- und Werkstattgebäude,25,484,523.1,4,5.3,21,60114
+Handelsgebäude,10,207,303,30,18.3,58,45034
+Warenlagergebäude,16,1130,1453.8,1,1.1,5,73331
+Hotels und Gaststätten,13,327,661.7,–,–,–,134305
+Sonstige Nichtwohngebäude,54,375,644,12,9.8,31,164867
+Ausgewählte Infrastrukturgebäude,61,461,753.9,160,40.2,181,202393
+Öffentliche Bauherren,35,400,612.8,148,30.5,150,121630
+Unternehmen,118,3377,5118.3,151,85.6,313,778701
+Wohnungsunternehmen,20,314,461.7,8,5.3,19,67481
+Immobilienfonds,8,354,742.2,81,37.8,157,138393
+"Land- und Forstw., Tierh., Fischerei",–,–,–,–,–,–,–
+Produzierendes Gewerbe,15,508,771.2,1,2.1,10,57488
+"Handel, Kreditinst., Dienstleistung, Versicherung, Verkehr u. Nachr.überm.",75,2201,3143.1,61,40.5,127,515339
+Private Haushalte,6,8,19.3,–,–,–,2643
+Organisationen o. Erwerbszweck,23,208,362.2,–,–,–,95648

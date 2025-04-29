@@ -1,0 +1,23 @@
+type,buildings,usage_area,living_area,apartments
+Wohngebäude,213,8.9,44.6,524
+Wohngebäude mit 1 Wohnung,180,5,19.3,180
+Wohngebäude mit 2 Wohnungen,8,0.3,1.4,16
+Wohngebäude mit 3 o. m. Wohnungen,25,3.6,23.9,328
+Wohnheime,–,–,–,–
+Öffentliche Bauherren,1,–,0.1,1
+Unternehmen,37,3.5,24.7,314
+Wohnungsunternehmen,30,3.2,19.8,225
+Immobilienfonds,–,–,–,–
+"Land- und Forstw., Tierh., Fischerei",–,–,–,–
+Produzierendes Gewerbe,–,–,–,–
+"Handel, Kreditinst., Dienstleistung, Versicherung, Verkehr u. Nachr.überm.",7,0.3,4.9,89
+Private Haushalte,171,5.1,18.3,191
+Organisationen ohne Erwerbszweck,4,0.3,1.5,18
+vor  1919,11,1,6,72
+von 1919 bis 1948,81,2.2,8,93
+von 1949 bis 1978,91,4.5,15,181
+von 1979 bis 1986,22,0.9,13.8,169
+von 1987 bis 1990,5,0.2,1.2,6
+von 1991 bis 1995,1,0.1,0.2,1
+von 1996 bis 2010,1,0.1,0.2,1
+2011 und später,1,–,0.1,1

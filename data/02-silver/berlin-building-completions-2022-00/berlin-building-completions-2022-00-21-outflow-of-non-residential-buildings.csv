@@ -1,0 +1,28 @@
+type,buildings,usage_area,living_area,apartments
+Nichtwohngebäude,110,202.2,2.9,42
+Anstaltsgebäude,–,–,–,–
+Büro- und Verwaltungsgebäude,32,59.9,0.8,10
+landwirtschaftliche Betriebsgebäude,3,22.3,–,–
+nichtlandwirtschaftliche Betriebsgebäude,64,102.6,2.1,32
+Fabrik- und Werkstattgebäude,24,42.8,0.1,1
+Handelsgebäude,10,9.9,–,–
+Warenlagergebäude,7,9.4,–,–
+Hotels und Gaststätten,9,13,1.9,29
+sonstige Nichtwohngebäude,11,17.4,–,–
+Öffentliche Bauherren,12,26.6,–,–
+Unternehmen,79,166.3,2.3,34
+Wohnungsunternehmen,36,72.1,0.1,1
+Immobilienfonds,13,35.3,2.1,32
+"Land- und Forstw., Tierh., Fischerei",–,–,–,–
+Produzierendes Gewerbe,4,5.8,–,–
+"Handel, Kreditinst., Dienstleistung, Versicherung, Verkehr u. Nachr.überm.",26,53.1,0.1,1
+Private Haushalte,18,7.3,0.6,8
+Organisationen o. Erwerbszweck,1,2.1,–,–
+vor  1919,4,27.5,–,–
+von 1919 bis 1948,7,4,–,–
+von 1949 bis 1978,39,82.7,0.2,3
+von 1979 bis 1986,26,48.2,0.3,4
+von 1987 bis 1990,9,4.7,–,–
+von 1991 bis 1995,10,19.1,1.9,29
+von 1996 bis 2010,15,16.1,0.6,6
+2011 und später,–,–,–,–

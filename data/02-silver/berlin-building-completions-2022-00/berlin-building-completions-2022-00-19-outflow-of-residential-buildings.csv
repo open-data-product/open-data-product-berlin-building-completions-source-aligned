@@ -1,0 +1,20 @@
+type,buildings,usage_area,living_area,apartments
+Wohngebäude,243,13.3,52.3,923
+Wohnheime,2,0.2,6.5,105
+Öffentliche Bauherren,2,0.2,1.2,43
+Unternehmen,32,4.5,26.9,623
+Wohnungsunternehmen,22,3.8,17.9,524
+Immobilienfonds,1,–,0.5,6
+"Land- und Forstw., Tierh., Fischerei",–,–,–,–
+Produzierendes Gewerbe,–,–,–,–
+"Handel, Kreditinst., Dienstleistung, Versicherung, Verkehr u. Nachr.überm.",9,0.7,8.5,93
+Private Haushalte,205,7.6,22.1,220
+Organisationen ohne Erwerbszweck,4,1.1,2.2,37
+vor  1919,10,0.5,2.4,25
+von 1919 bis 1948,93,3.1,10.4,103
+von 1949 bis 1978,113,8.4,33.3,705
+von 1979 bis 1986,17,1.1,4.5,79
+von 1987 bis 1990,3,–,0.3,3
+von 1991 bis 1995,2,0.1,0.5,2
+von 1996 bis 2010,4,0.1,0.7,5
+2011 und später,1,0.1,0.3,1

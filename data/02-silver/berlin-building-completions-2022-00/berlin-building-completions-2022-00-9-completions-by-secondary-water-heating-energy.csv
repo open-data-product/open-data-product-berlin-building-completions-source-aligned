@@ -1,0 +1,33 @@
+id,type,buildings,oil,gas,electricity,district_heating,geothermal_energy,environmental_thermal_energy,solar_thermal_energy,wood,biogas_bio_methane,other_bio_mass,other_heating,no_heating,conventional_energy,renewable_energy
+1,Wohngebäude,1570,–,76,144,12,6,25,218,5,2,–,1,1081,220,256
+2,darin: Wohnungen,15368,–,329,221,26,10,118,879,7,19,–,1,13758,550,1033
+3,Wohngebäude mit 1 Wohnung,861,–,54,126,8,5,15,151,4,1,–,1,496,180,176
+4,Wohngebäude mit 2 Wohnungen,57,–,6,10,–,–,–,16,–,–,–,–,25,16,16
+5,Wohngebäude mit 3 o. m. Wohnungen,638,–,16,8,4,1,10,48,1,1,–,–,549,24,61
+6,darin: Wohnungen,13408,–,263,75,18,5,103,555,3,18,–,–,12368,338,684
+7,Wohnheime,14,–,–,–,–,–,–,3,–,–,–,–,11,–,3
+8,darin: Wohnungen,985,–,–,–,–,–,–,141,–,–,–,–,844,–,141
+9,Wohngebäude mit Eigentumswohnungen,230,–,3,6,2,1,9,23,–,1,–,–,185,9,34
+10,darin: Wohnungen,3548,–,56,58,12,5,100,160,–,18,–,–,3139,114,283
+11,Nichtwohngebäude,187,–,4,6,3,2,8,6,2,–,–,2,154,10,18
+12,darin: Rauminhalt 1 000 m³,3351,–,19,102,158,217,54,138,23,–,–,105,2536,121,432
+13,Anstaltsgebäude,2,–,–,–,–,–,–,–,2,–,–,–,–,–,2
+14,darin: Rauminhalt 1 000 m³,23,–,–,–,–,–,–,–,23,–,–,–,–,–,23
+15,Büro- und Verwaltungsgebäude,46,–,–,2,2,1,2,–,–,–,–,2,37,2,3
+16,darin: Rauminhalt 1 000 m³,1787,–,–,25,133,189,6,–,–,–,–,105,1329,25,195
+17,landwirtschaftliche Betriebsgebäude,3,–,–,–,–,–,–,–,–,–,–,–,3,–,–
+18,darin: Rauminhalt 1 000 m³,4,–,–,–,–,–,–,–,–,–,–,–,4,–,–
+19,nichtlandwirtschaftliche Betriebsgebäude,72,–,3,1,–,–,2,4,–,–,–,–,62,4,6
+20,darin: Rauminhalt 1 000 m³,838,–,17,2,–,–,22,124,–,–,–,–,674,19,145
+21,Fabrik- und Werkstattgebäude,16,–,–,1,–,–,–,–,–,–,–,–,15,1,–
+22,darin: Rauminhalt 1 000 m³,145,–,–,2,–,–,–,–,–,–,–,–,143,2,–
+23,Handelsgebäude,12,–,1,–,–,–,1,2,–,–,–,–,8,1,3
+24,darin: Rauminhalt 1 000 m³,204,–,7,–,–,–,13,106,–,–,–,–,77,7,119
+25,Warenlagergebäude,19,–,–,–,–,–,–,1,–,–,–,–,18,–,1
+26,darin: Rauminhalt 1 000 m³,172,–,–,–,–,–,–,17,–,–,–,–,155,–,17
+27,Hotels und Gaststätten,8,–,1,–,–,–,1,1,–,–,–,–,5,1,2
+28,darin: Rauminhalt 1 000 m³,64,–,4,–,–,–,8,1,–,–,–,–,51,4,9
+29,sonstige Nichtwohngebäude,64,–,1,3,1,1,4,2,–,–,–,–,52,4,7
+30,darin: Rauminhalt 1 000 m³,700,–,2,75,25,28,26,15,–,–,–,–,529,77,70
+31,ausgewählte Infrastrukturgebäude,72,–,2,3,1,1,4,2,2,–,–,–,57,5,9
+32,darin: Rauminhalt 1 000 m³,745,–,8,75,25,28,26,15,23,–,–,–,545,83,92

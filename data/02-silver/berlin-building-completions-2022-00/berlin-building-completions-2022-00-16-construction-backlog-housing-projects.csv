@@ -1,0 +1,30 @@
+type,backlog_total,backlog_new_buildings,backlog_new_buildings_under_roof,backlog_new_buildings_not_yet_under_roof,backlog_new_buildings_not_yet_started,expired_building_permits
+Wohngebäude,8820,5256,1509,1842,1905,270
+Wohngebäude mit 1 Wohnung,–,2753,663,967,1123,128
+Wohngebäude mit 2 Wohnungen,–,260,81,74,105,10
+Wohngebäude mit 3 o. m. Wohnungen,–,2210,759,789,662,129
+Wohnheime,56,33,6,12,15,3
+Wohngebäude mit Eigentumswohnungen,1637,764,251,287,226,79
+Öffentliche Bauherren,464,384,179,158,47,5
+Unternehmen,4121,2724,736,951,1037,193
+Wohnungsunternehmen,3099,2098,557,665,876,149
+Immobilienfonds,393,200,65,84,51,3
+"Land- und Forstw., Tierh., Fischerei",–,–,–,–,–,–
+Produzierendes Gewerbe,49,41,7,25,9,3
+"Handel, Kreditinst., Dienstleistung, Versicherung, Verkehr u. Nachr.überm.",580,385,107,177,101,38
+Private Haushalte,4149,2109,589,722,798,71
+Organisationen ohne Erwerbszweck,86,39,5,11,23,1
+II. Halbjahr 2022,1166,754,2,151,601,2
+I.  Halbjahr 2022,1315,852,79,405,368,4
+II. Halbjahr 2021,1236,803,196,400,207,4
+I.  Halbjahr 2021,1237,814,279,287,248,6
+Jahr 2020,1356,742,293,308,141,79
+2019 und früher,2510,1291,660,291,340,175
+Mitte,510,203,101,29,73,15
+Friedrichshain-Kreuzberg,393,119,29,54,36,2
+Pankow,1282,819,234,308,277,34
+Charlottenburg-Wilmersdorf,533,146,58,32,56,17
+Spandau,597,399,171,107,121,35
+Steglitz-Zehlendorf,856,325,88,99,138,9
+Tempelhof-Schöneberg,640,307,69,99,139,7
+Neukölln,558,319,13,171,135,13
