@@ -999,3 +999,336 @@ input_ports:
           - name: non_residential_buildings
           - name: non_residential_buildings_apartments
           - name: non_residential_buildings_usage_area
+  - id: berlin-building-completions-2023-00
+    files:
+      - source_file_name: berlin-building-completions-2023-00-12-completions-including-measures-on-existing-buildings.csv
+        target_file_name: berlin-building-completions-2023-00-12-completions-including-measures-on-existing-buildings-districts.csv
+        names:
+          - name: id
+            key: "district_name"
+            mapping:
+              "Mitte": "01"
+              "Friedrichshain-Kreuzberg": "02"
+              "Pankow": "03"
+              "Charlottenburg-Wilmersdorf": "04"
+              "Spandau": "05"
+              "Steglitz-Zehlendorf": "06"
+              "Tempelhof-Schöneberg": "07"
+              "Neukölln": "08"
+              "Treptow-Köpenick": "09"
+              "Marzahn-Hellersdorf": "10"
+              "Lichtenberg": "11"
+              "Reinickendorf": "12"
+          - { name: district_name, remove: True }
+          - name: buildings
+          - name: usage_area
+          - name: apartments
+          - name: living_are
+          - name: estimated_costs
+      - source_file_name: berlin-building-completions-2023-00-12-completions-including-measures-on-existing-buildings.csv
+        target_file_name: berlin-building-completions-2023-00-12-completions-including-measures-on-existing-buildings-city.csv
+        aggregate_by: "total"
+        names:
+          - name: id
+          - { name: district_name, remove: True }
+          - name: buildings
+          - name: usage_area
+          - name: apartments
+          - name: living_are
+          - name: estimated_costs
+      - source_file_name: berlin-building-completions-2023-00-13-completions-new-buildings.csv
+        target_file_name: berlin-building-completions-2023-00-13-completions-new-buildings-districts.csv
+        names:
+          - name: id
+            key: "district_name"
+            mapping:
+              "Mitte": "01"
+              "Friedrichshain-Kreuzberg": "02"
+              "Pankow": "03"
+              "Charlottenburg-Wilmersdorf": "04"
+              "Spandau": "05"
+              "Steglitz-Zehlendorf": "06"
+              "Tempelhof-Schöneberg": "07"
+              "Neukölln": "08"
+              "Treptow-Köpenick": "09"
+              "Marzahn-Hellersdorf": "10"
+              "Lichtenberg": "11"
+              "Reinickendorf": "12"
+          - { name: district_name, remove: True }
+          - name: buildings
+          - name: volume
+          - name: usage_area
+          - name: apartments
+          - name: living_are
+          - name: estimated_costs
+      - source_file_name: berlin-building-completions-2023-00-13-completions-new-buildings.csv
+        target_file_name: berlin-building-completions-2023-00-13-completions-new-buildings-city.csv
+        aggregate_by: "total"
+        names:
+          - name: id
+          - { name: district_name, remove: True }
+          - name: buildings
+          - name: volume
+          - name: usage_area
+          - name: apartments
+          - name: living_are
+          - name: estimated_costs
+      - source_file_name: berlin-building-completions-2023-00-14-completions-new-buildings-with-1-or-2-apartments.csv
+        target_file_name: berlin-building-completions-2023-00-14-completions-new-buildings-with-1-or-2-apartments-districts.csv
+        names:
+          - name: id
+            key: "district_name"
+            mapping:
+              "Mitte": "01"
+              "Friedrichshain-Kreuzberg": "02"
+              "Pankow": "03"
+              "Charlottenburg-Wilmersdorf": "04"
+              "Spandau": "05"
+              "Steglitz-Zehlendorf": "06"
+              "Tempelhof-Schöneberg": "07"
+              "Neukölln": "08"
+              "Treptow-Köpenick": "09"
+              "Marzahn-Hellersdorf": "10"
+              "Lichtenberg": "11"
+              "Reinickendorf": "12"
+          - { name: district_name, remove: True }
+          - name: buildings
+          - name: volume
+          - name: usage_area
+          - name: apartments
+          - name: living_are
+          - name: estimated_costs
+      - source_file_name: berlin-building-completions-2023-00-14-completions-new-buildings-with-1-or-2-apartments.csv
+        target_file_name: berlin-building-completions-2023-00-14-completions-new-buildings-with-1-or-2-apartments-city.csv
+        aggregate_by: "total"
+        names:
+          - name: id
+          - { name: district_name, remove: True }
+          - name: buildings
+          - name: volume
+          - name: usage_area
+          - name: apartments
+          - name: living_are
+          - name: estimated_costs
+      - source_file_name: berlin-building-completions-2023-00-15-completions-new-non-residential-buildings.csv
+        target_file_name: berlin-building-completions-2023-00-15-completions-new-non-residential-buildings-districts.csv
+        names:
+          - name: id
+            key: "district_name"
+            mapping:
+              "Mitte": "01"
+              "Friedrichshain-Kreuzberg": "02"
+              "Pankow": "03"
+              "Charlottenburg-Wilmersdorf": "04"
+              "Spandau": "05"
+              "Steglitz-Zehlendorf": "06"
+              "Tempelhof-Schöneberg": "07"
+              "Neukölln": "08"
+              "Treptow-Köpenick": "09"
+              "Marzahn-Hellersdorf": "10"
+              "Lichtenberg": "11"
+              "Reinickendorf": "12"
+          - { name: district_name, remove: True }
+          - name: buildings
+          - name: volume
+          - name: usage_area
+          - name: apartments
+          - name: living_are
+          - name: estimated_costs
+      - source_file_name: berlin-building-completions-2023-00-15-completions-new-non-residential-buildings.csv
+        target_file_name: berlin-building-completions-2023-00-15-completions-new-non-residential-buildings-city.csv
+        aggregate_by: "total"
+        names:
+          - name: id
+          - { name: district_name, remove: True }
+          - name: buildings
+          - name: volume
+          - name: usage_area
+          - name: apartments
+          - name: living_are
+          - name: estimated_costs
+      - source_file_name: berlin-building-completions-2023-00-16-construction-backlog-housing-projects-districts.csv
+        target_file_name: berlin-building-completions-2023-00-16-construction-backlog-housing-projects-districts.csv
+        names:
+          - name: id
+            key: "district_name"
+            mapping:
+              "Mitte": "01"
+              "Friedrichshain-Kreuzberg": "02"
+              "Pankow": "03"
+              "Charlottenburg-Wilmersdorf": "04"
+              "Spandau": "05"
+              "Steglitz-Zehlendorf": "06"
+              "Tempelhof-Schöneberg": "07"
+              "Neukölln": "08"
+              "Treptow-Köpenick": "09"
+              "Marzahn-Hellersdorf": "10"
+              "Lichtenberg": "11"
+              "Reinickendorf": "12"
+          - { name: district_name, remove: True }
+          - name: buildings
+          - name: volume
+          - name: usage_area
+          - name: apartments
+          - name: living_are
+          - name: estimated_costs
+      - source_file_name: berlin-building-completions-2023-00-16-construction-backlog-housing-projects-districts.csv
+        target_file_name: berlin-building-completions-2023-00-16-construction-backlog-housing-projects-city.csv
+        aggregate_by: "total"
+        names:
+          - name: id
+          - { name: district_name, remove: True }
+          - name: buildings
+          - name: volume
+          - name: usage_area
+          - name: apartments
+          - name: living_are
+          - name: estimated_costs
+      - source_file_name: berlin-building-completions-2023-00-16-construction-backlog-housing-projects-districts.csv
+        target_file_name: berlin-building-completions-2023-00-16-construction-backlog-housing-projects-districts.csv
+        names:
+          - name: id
+            key: "district_name"
+            mapping:
+              "Mitte": "01"
+              "Friedrichshain-Kreuzberg": "02"
+              "Pankow": "03"
+              "Charlottenburg-Wilmersdorf": "04"
+              "Spandau": "05"
+              "Steglitz-Zehlendorf": "06"
+              "Tempelhof-Schöneberg": "07"
+              "Neukölln": "08"
+              "Treptow-Köpenick": "09"
+              "Marzahn-Hellersdorf": "10"
+              "Lichtenberg": "11"
+              "Reinickendorf": "12"
+          - { name: district_name, remove: True }
+          - name: backlog_total
+          - name: backlog_new_buildings
+          - name: backlog_new_buildings_under_roof
+          - name: backlog_new_buildings_not_yet_under_roof
+          - name: backlog_new_buildings_not_yet_started
+          - name: expired_building_permits
+      - source_file_name: berlin-building-completions-2023-00-16-construction-backlog-housing-projects-districts.csv
+        target_file_name: berlin-building-completions-2023-00-16-construction-backlog-housing-projects-city.csv
+        aggregate_by: "total"
+        names:
+          - name: id
+          - { name: district_name, remove: True }
+          - name: backlog_total
+          - name: backlog_new_buildings
+          - name: backlog_new_buildings_under_roof
+          - name: backlog_new_buildings_not_yet_under_roof
+          - name: backlog_new_buildings_not_yet_started
+          - name: expired_building_permits
+      - source_file_name: berlin-building-completions-2023-00-17-construction-backlog-apartments-districts.csv
+        target_file_name: berlin-building-completions-2023-00-17-construction-backlog-apartments-districts.csv
+        names:
+          - name: id
+            key: "district_name"
+            mapping:
+              "Mitte": "01"
+              "Friedrichshain-Kreuzberg": "02"
+              "Pankow": "03"
+              "Charlottenburg-Wilmersdorf": "04"
+              "Spandau": "05"
+              "Steglitz-Zehlendorf": "06"
+              "Tempelhof-Schöneberg": "07"
+              "Neukölln": "08"
+              "Treptow-Köpenick": "09"
+              "Marzahn-Hellersdorf": "10"
+              "Lichtenberg": "11"
+              "Reinickendorf": "12"
+          - { name: district_name, remove: True }
+          - name: backlog_total
+          - name: backlog_new_buildings
+          - name: backlog_new_buildings_under_roof
+          - name: backlog_new_buildings_not_yet_under_roof
+          - name: backlog_new_buildings_not_yet_started
+          - name: expired_building_permits
+      - source_file_name: berlin-building-completions-2023-00-17-construction-backlog-apartments-districts.csv
+        target_file_name: berlin-building-completions-2023-00-17-construction-backlog-apartments-city.csv
+        aggregate_by: "total"
+        names:
+          - name: id
+          - { name: district_name, remove: True }
+          - name: backlog_total
+          - name: backlog_new_buildings
+          - name: backlog_new_buildings_under_roof
+          - name: backlog_new_buildings_not_yet_under_roof
+          - name: backlog_new_buildings_not_yet_started
+          - name: expired_building_permits
+      - source_file_name: berlin-building-completions-2023-00-18-construction-backlog-non-residential-buildings-districts.csv
+        target_file_name: berlin-building-completions-2023-00-18-construction-backlog-non-residential-buildings-districts.csv
+        names:
+          - name: id
+            key: "district_name"
+            mapping:
+              "Mitte": "01"
+              "Friedrichshain-Kreuzberg": "02"
+              "Pankow": "03"
+              "Charlottenburg-Wilmersdorf": "04"
+              "Spandau": "05"
+              "Steglitz-Zehlendorf": "06"
+              "Tempelhof-Schöneberg": "07"
+              "Neukölln": "08"
+              "Treptow-Köpenick": "09"
+              "Marzahn-Hellersdorf": "10"
+              "Lichtenberg": "11"
+              "Reinickendorf": "12"
+          - { name: district_name, remove: True }
+          - name: backlog_total
+          - name: backlog_new_buildings
+          - name: backlog_new_buildings_under_roof
+          - name: backlog_new_buildings_not_yet_under_roof
+          - name: backlog_new_buildings_not_yet_started
+          - name: expired_building_permits
+      - source_file_name: berlin-building-completions-2023-00-18-construction-backlog-non-residential-buildings-districts.csv
+        target_file_name: berlin-building-completions-2023-00-18-construction-backlog-non-residential-buildings-city.csv
+        aggregate_by: "total"
+        names:
+          - name: id
+          - { name: district_name, remove: True }
+          - name: backlog_total
+          - name: backlog_new_buildings
+          - name: backlog_new_buildings_under_roof
+          - name: backlog_new_buildings_not_yet_under_roof
+          - name: backlog_new_buildings_not_yet_started
+          - name: expired_building_permits
+      - source_file_name: berlin-building-completions-2023-00-23-outflow-of-all-buildings-complete-districts.csv
+        target_file_name: berlin-building-completions-2023-00-23-outflow-of-all-buildings-complete-districts-districts.csv
+        names:
+          - name: id
+            key: "district_name"
+            mapping:
+              "Mitte": "01"
+              "Friedrichshain-Kreuzberg": "02"
+              "Pankow": "03"
+              "Charlottenburg-Wilmersdorf": "04"
+              "Spandau": "05"
+              "Steglitz-Zehlendorf": "06"
+              "Tempelhof-Schöneberg": "07"
+              "Neukölln": "08"
+              "Treptow-Köpenick": "09"
+              "Marzahn-Hellersdorf": "10"
+              "Lichtenberg": "11"
+              "Reinickendorf": "12"
+          - { name: district_name, remove: True }
+          - name: residential_buildings
+          - name: residential_buildings_apartments
+          - name: residential_buildings_usage_area
+          - name: non_residential_buildings
+          - name: non_residential_buildings_apartments
+          - name: non_residential_buildings_usage_area
+      - source_file_name: berlin-building-completions-2023-00-23-outflow-of-all-buildings-complete-districts.csv
+        target_file_name: berlin-building-completions-2023-00-23-outflow-of-all-buildings-complete-districts-city.csv
+        aggregate_by: "total"
+        names:
+          - name: id
+          - { name: district_name, remove: True }
+          - name: residential_buildings
+          - name: residential_buildings_apartments
+          - name: residential_buildings_usage_area
+          - name: non_residential_buildings
+          - name: non_residential_buildings_apartments
+          - name: non_residential_buildings_usage_area

@@ -1,0 +1,33 @@
+type,backlog_total,backlog_new_buildings,backlog_new_buildings_under_roof,backlog_new_buildings_not_yet_under_roof,backlog_new_buildings_not_yet_started,expired_building_permits
+Nichtwohngebäude,1270,843,227,230,386,34
+Anstaltsgebäude,22,13,3,4,6,1
+Büro- und Verwaltungsgebäude,392,248,66,51,131,9
+landwirtschaftliche Betriebsgebäude,–,–,–,–,–,–
+nichtlandwirtschaftliche Betriebsgebäude,477,317,97,74,146,14
+Fabrik- und Werkstattgebäude,125,90,29,22,39,7
+Handelsgebäude,85,37,13,7,17,–
+Warenlagergebäude,67,48,13,9,26,1
+Hotels und Gaststätten,120,68,16,18,34,5
+sonstige Nichtwohngebäude,379,265,61,101,103,10
+Öffentliche Bauherren,261,195,42,86,67,2
+Unternehmen,793,526,156,109,261,23
+Wohnungsunternehmen,171,129,41,28,60,2
+Immobilienfonds,110,68,24,16,28,3
+"Land- und Forstw., Tierh., Fischerei",1,1,1,–,–,–
+Produzierendes Gewerbe,100,61,23,17,21,3
+"Handel, Kreditinst., Dienstleistung, Versicherung, Verkehr u. Nachr.überm.",411,267,67,48,152,15
+Private Haushalte,88,46,16,9,21,5
+Organisationen ohne Erwerbszweck,128,76,13,26,37,4
+II. Halbjahr 2023,164,115,3,11,101,–
+I.  Halbjahr 2023,138,88,4,33,51,–
+II. Halbjahr 2022,154,108,6,32,70,–
+I.  Halbjahr 2022,139,91,13,33,45,–
+Jahr 2021,268,194,73,57,64,13
+2020 und früher,407,247,128,64,55,21
+Mitte,144,95,38,28,29,4
+Friedrichshain-Kreuzberg,79,40,14,13,13,1
+Pankow,115,75,19,25,31,4
+Charlottenburg-Wilmersdorf,151,87,17,22,48,3
+Spandau,98,73,17,14,42,7
+Steglitz-Zehlendorf,88,53,8,15,30,2
+Tempelhof-Schöneberg,96,62,20,7,35,–

@@ -1191,3 +1191,400 @@ input_ports:
             skip_rows: 23
             head: 12
             dropna: True
+  - id: berlin-building-completions-2023-00
+    files:
+      - source_file_name: SB_F02-02-00_2023j01_BE.xlsx
+        target_file_name: berlin-building-completions-2023-00.xlsx
+        datasets:
+          - target_file_name: berlin-building-completions-2023-00-1-completions-new-buildings.csv
+            sheet_name: "Baufert. Tab. 1 u. 2"
+            names:
+              - { name: year, type: int }
+              - { name: buildings, type: int }
+              - { name: residential_buildings, type: int }
+              - { name: non_residential_buildings, type: int }
+              - { name: building_measures_on_existing_buildings, type: int }
+              - { name: usage_area, type: int }
+              - { name: living_area, type: int }
+              - { name: apartments, type: int }
+              - { name: apartment_rooms, type: int }
+              - { name: estimated_costs, type: int }
+            skip_rows: 10
+            head: 10
+          - target_file_name: berlin-building-completions-2023-00-2-completions-including-measures-on-existing-buildings.csv
+            sheet_name: "Baufert. Tab. 1 u. 2"
+            names:
+              - { name: year, type: int }
+              - { name: buildings, type: int }
+              - { name: residential_buildings, type: int }
+              - { name: non_residential_buildings, type: int }
+              - { name: building_measures_on_existing_buildings, type: int }
+              - { name: usage_area, type: int }
+              - { name: living_area, type: int }
+              - { name: apartments, type: int }
+              - { name: apartment_rooms, type: int }
+              - { name: estimated_costs, type: int }
+            skip_rows: 33
+            head: 10
+          - target_file_name: berlin-building-completions-2023-00-3-completions-by-type-and-constructor-including-measures-on-existing-buildings.csv
+            sheet_name: "Baufert. Tab. 3"
+            names:
+              - name: type
+              - { name: measures, type: int }
+              - { name: usage_area, type: float }
+              - { name: apartments, type: int }
+              - { name: living_area, type: float }
+              - { name: living_rooms, type: int }
+              - { name: estimated_costs, type: int }
+            skip_rows: 8
+            head: 46
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-4-completions-by-type-and-constructor.csv
+            sheet_name: "Baufert. Tab. 4 "
+            names:
+              - name: type
+              - { name: buildings, type: int }
+              - { name: volume, type: int }
+              - { name: usage_area, type: float }
+              - { name: apartments, type: int }
+              - { name: living_area, type: float }
+              - { name: living_rooms, type: int }
+              - { name: estimated_costs, type: int }
+            skip_rows: 8
+            head: 50
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-5-completions-by-building-type-and-heating.csv
+            sheet_name: "Baufert. Tab.5"
+            names:
+              - name: type
+              - { name: buildings, type: int }
+              - { name: district_heating, type: int }
+              - { name: block_heating, type: int }
+              - { name: central_heating, type: int }
+              - { name: floor_heating, type: int }
+              - { name: single_room_heating, type: int }
+              - { name: without_heating, type: int }
+            skip_rows: 8
+            head: 40
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-6-completions-by-primary-heating-energy.csv
+            sheet_name: "Baufert. Tab. 6 "
+            names:
+              - { name: id, type: int }
+              - name: type
+              - { name: buildings, type: int }
+              - { name: oil, type: int }
+              - { name: gas, type: int }
+              - { name: electricity, type: int }
+              - { name: district_heating, type: int }
+              - { name: geothermal_energy, type: int }
+              - { name: environmental_thermal_energy, type: int }
+              - { name: solar_thermal_energy, type: int }
+              - { name: wood, type: int }
+              - { name: biogas_bio_methane, type: int }
+              - { name: other_bio_mass, type: int }
+              - { name: other_heating, type: int }
+              - { name: no_heating, type: int }
+              - { name: conventional_energy, type: int }
+              - { name: renewable_energy, type: int }
+            skip_rows: 7
+            head: 40
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-7-completions-by-secondary-heating-energy.csv
+            sheet_name: "Baufert. Tab. 7 "
+            names:
+              - { name: id, type: int }
+              - name: type
+              - { name: buildings, type: int }
+              - { name: oil, type: int }
+              - { name: gas, type: int }
+              - { name: electricity, type: int }
+              - { name: district_heating, type: int }
+              - { name: geothermal_energy, type: int }
+              - { name: environmental_thermal_energy, type: int }
+              - { name: solar_thermal_energy, type: int }
+              - { name: wood, type: int }
+              - { name: biogas_bio_methane, type: int }
+              - { name: other_bio_mass, type: int }
+              - { name: other_heating, type: int }
+              - { name: no_heating, type: int }
+              - { name: conventional_energy, type: int }
+              - { name: renewable_energy, type: int }
+            skip_rows: 7
+            head: 40
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-8-completions-by-primary-water-heating-energy.csv
+            sheet_name: "Baufert. Tab. 8 "
+            names:
+              - { name: id, type: int }
+              - name: type
+              - { name: buildings, type: int }
+              - { name: oil, type: int }
+              - { name: gas, type: int }
+              - { name: electricity, type: int }
+              - { name: district_heating, type: int }
+              - { name: geothermal_energy, type: int }
+              - { name: environmental_thermal_energy, type: int }
+              - { name: solar_thermal_energy, type: int }
+              - { name: wood, type: int }
+              - { name: biogas_bio_methane, type: int }
+              - { name: other_bio_mass, type: int }
+              - { name: other_heating, type: int }
+              - { name: no_heating, type: int }
+              - { name: conventional_energy, type: int }
+              - { name: renewable_energy, type: int }
+            skip_rows: 7
+            head: 40
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-9-completions-by-secondary-water-heating-energy.csv
+            sheet_name: "Baufert. Tab. 9 "
+            names:
+              - { name: id, type: int }
+              - name: type
+              - { name: buildings, type: int }
+              - { name: oil, type: int }
+              - { name: gas, type: int }
+              - { name: electricity, type: int }
+              - { name: district_heating, type: int }
+              - { name: geothermal_energy, type: int }
+              - { name: environmental_thermal_energy, type: int }
+              - { name: solar_thermal_energy, type: int }
+              - { name: wood, type: int }
+              - { name: biogas_bio_methane, type: int }
+              - { name: other_bio_mass, type: int }
+              - { name: other_heating, type: int }
+              - { name: no_heating, type: int }
+              - { name: conventional_energy, type: int }
+              - { name: renewable_energy, type: int }
+            skip_rows: 7
+            head: 40
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-10-completions-by-type-and-predominant-building-material.csv
+            sheet_name: "Baufert. Tab. 10"
+            names:
+              - name: type
+              - name: unit
+              - { name: buildings, type: int }
+              - { name: steel, type: int }
+              - { name: reinforced_concrete, type: int }
+              - { name: bricks, type: int }
+              - { name: sand_lime_bricks, type: int }
+              - { name: aerated_concrete, type: int }
+              - { name: light_concrete, type: int }
+              - { name: wood, type: int }
+              - { name: other, type: int }
+            skip_rows: 8
+            head: 41
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-11-completions-by-execution.csv
+            sheet_name: "Baufert. Tab. 11"
+            names:
+              - name: type
+              - name: unit
+              - { name: buildings, type: int }
+              - { name: execution_time_below_6_months, type: int }
+              - { name: execution_time_between_6_12_months, type: int }
+              - { name: execution_time_between_12_18_months, type: int }
+              - { name: execution_time_between_18_24_months, type: int }
+              - { name: execution_time_between_24_30_months, type: int }
+              - { name: execution_time_between_30_36_months, type: int }
+              - { name: execution_time_above_36_months, type: int }
+              - { name: average_execution_time, type: int }
+            skip_rows: 9
+            head: 34
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-12-completions-including-measures-on-existing-buildings.csv
+            sheet_name: "Baufert. Tab. 12 u. 13"
+            names:
+              - name: district_name
+              - { name: buildings, type: int }
+              - { name: usage_area, type: float }
+              - { name: apartments, type: int }
+              - { name: living_are, type: float }
+              - { name: estimated_costs, type: int }
+            skip_rows: 8
+            head: 12
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-13-completions-new-buildings.csv
+            sheet_name: "Baufert. Tab. 12 u. 13"
+            names:
+              - name: district_name
+              - { name: buildings, type: int }
+              - { name: volume, type: int }
+              - { name: usage_area, type: float }
+              - { name: apartments, type: int }
+              - { name: living_are, type: float }
+              - { name: estimated_costs, type: int }
+            skip_rows: 31
+            head: 12
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-14-completions-new-buildings-with-1-or-2-apartments.csv
+            sheet_name: "Baufert. Tab. 14 u. 15"
+            names:
+              - name: district_name
+              - { name: buildings, type: int }
+              - { name: volume, type: int }
+              - { name: usage_area, type: float }
+              - { name: apartments, type: int }
+              - { name: living_are, type: float }
+              - { name: estimated_costs, type: int }
+            skip_rows: 8
+            head: 12
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-15-completions-new-non-residential-buildings.csv
+            sheet_name: "Baufert. Tab. 14 u. 15"
+            names:
+              - name: district_name
+              - { name: buildings, type: int }
+              - { name: volume, type: int }
+              - { name: usage_area, type: float }
+              - { name: apartments, type: int }
+              - { name: living_are, type: float }
+              - { name: estimated_costs, type: int }
+            skip_rows: 31
+            head: 12
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-16-construction-backlog-housing-projects.csv
+            sheet_name: "BAUÜB Tab. 16"
+            names:
+              - name: type
+              - { name: backlog_total, type: int }
+              - { name: backlog_new_buildings, type: int }
+              - { name: backlog_new_buildings_under_roof, type: int }
+              - { name: backlog_new_buildings_not_yet_under_roof, type: int }
+              - { name: backlog_new_buildings_not_yet_started, type: int }
+              - { name: expired_building_permits, type: int }
+            skip_rows: 8
+            head: 29
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-16-construction-backlog-housing-projects-districts.csv
+            sheet_name: "BAUÜB Tab. 16"
+            names:
+              - name: district_name
+              - { name: backlog_total, type: int }
+              - { name: backlog_new_buildings, type: int }
+              - { name: backlog_new_buildings_under_roof, type: int }
+              - { name: backlog_new_buildings_not_yet_under_roof, type: int }
+              - { name: backlog_new_buildings_not_yet_started, type: int }
+              - { name: expired_building_permits, type: int }
+            skip_rows: 39
+            head: 12
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-17-construction-backlog-apartments.csv
+            sheet_name: "BAUÜB Tab.  17 "
+            names:
+              - name: type
+              - { name: backlog_total, type: int }
+              - { name: backlog_new_buildings, type: int }
+              - { name: backlog_new_buildings_under_roof, type: int }
+              - { name: backlog_new_buildings_not_yet_under_roof, type: int }
+              - { name: backlog_new_buildings_not_yet_started, type: int }
+              - { name: expired_building_permits, type: int }
+            skip_rows: 8
+            head: 29
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-17-construction-backlog-apartments-districts.csv
+            sheet_name: "BAUÜB Tab.  17 "
+            names:
+              - name: district_name
+              - { name: backlog_total, type: int }
+              - { name: backlog_new_buildings, type: int }
+              - { name: backlog_new_buildings_under_roof, type: int }
+              - { name: backlog_new_buildings_not_yet_under_roof, type: int }
+              - { name: backlog_new_buildings_not_yet_started, type: int }
+              - { name: expired_building_permits, type: int }
+            skip_rows: 39
+            head: 12
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-18-construction-backlog-non-residential-buildings.csv
+            sheet_name: "BAUÜB Tab.  18"
+            names:
+              - name: type
+              - { name: backlog_total, type: int }
+              - { name: backlog_new_buildings, type: int }
+              - { name: backlog_new_buildings_under_roof, type: int }
+              - { name: backlog_new_buildings_not_yet_under_roof, type: int }
+              - { name: backlog_new_buildings_not_yet_started, type: int }
+              - { name: expired_building_permits, type: int }
+            skip_rows: 8
+            head: 32
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-18-construction-backlog-non-residential-buildings-districts.csv
+            sheet_name: "BAUÜB Tab.  18"
+            names:
+              - name: district_name
+              - { name: backlog_total, type: int }
+              - { name: backlog_new_buildings, type: int }
+              - { name: backlog_new_buildings_under_roof, type: int }
+              - { name: backlog_new_buildings_not_yet_under_roof, type: int }
+              - { name: backlog_new_buildings_not_yet_started, type: int }
+              - { name: expired_building_permits, type: int }
+            skip_rows: 42
+            head: 12
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-19-outflow-of-residential-buildings.csv
+            sheet_name: "BAUAB Tab. 19"
+            names:
+              - name: type
+              - { name: buildings, type: int }
+              - { name: usage_area, type: float }
+              - { name: living_area, type: float }
+              - { name: apartments, type: int }
+            skip_rows: 8
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-20-outflow-of-residential-buildings-complete.csv
+            sheet_name: "BAUAB Tab. 20"
+            names:
+              - name: type
+              - { name: buildings, type: int }
+              - { name: usage_area, type: float }
+              - { name: living_area, type: float }
+              - { name: apartments, type: int }
+            skip_rows: 8
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-21-outflow-of-non-residential-buildings.csv
+            sheet_name: "BAUAB Tab. 21"
+            names:
+              - name: type
+              - { name: buildings, type: int }
+              - { name: usage_area, type: float }
+              - { name: living_area, type: float }
+              - { name: apartments, type: int }
+            skip_rows: 8
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-22-outflow-of-non-residential-buildings-complete.csv
+            sheet_name: "BAUAB Tab.  22"
+            names:
+              - name: type
+              - { name: buildings, type: int }
+              - { name: usage_area, type: float }
+              - { name: living_area, type: float }
+              - { name: apartments, type: int }
+            skip_rows: 8
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-23-outflow-of-all-buildings-complete.csv
+            sheet_name: "BAUAB Tab.  23"
+            names:
+              - name: type
+              - { name: residential_buildings, type: int }
+              - { name: residential_buildings_apartments, type: int }
+              - { name: residential_buildings_usage_area, type: float }
+              - { name: non_residential_buildings, type: int }
+              - { name: non_residential_buildings_apartments, type: int }
+              - { name: non_residential_buildings_usage_area, type: float }
+            skip_rows: 8
+            head: 13
+            dropna: True
+          - target_file_name: berlin-building-completions-2023-00-23-outflow-of-all-buildings-complete-districts.csv
+            sheet_name: "BAUAB Tab.  23"
+            names:
+              - name: district_name
+              - { name: residential_buildings, type: int }
+              - { name: residential_buildings_apartments, type: int }
+              - { name: residential_buildings_usage_area, type: float }
+              - { name: non_residential_buildings, type: int }
+              - { name: non_residential_buildings_apartments, type: int }
+              - { name: non_residential_buildings_usage_area, type: float }
+            skip_rows: 23
+            head: 12
+            dropna: True

@@ -1,0 +1,33 @@
+type,buildings,district_heating,block_heating,central_heating,floor_heating,single_room_heating,without_heating
+Wohngebäude,1436,424,74,893,40,5,–
+darin: Wohnungen,14431,10637,1246,2488,55,5,–
+Wohngebäude mit 1 Wohnung,824,50,12,723,34,5,–
+Wohngebäude mit 2 Wohnungen,82,23,2,56,1,–,–
+Wohngebäude mit 3 o. m. Wohnungen,513,339,57,112,5,–,–
+darin: Wohnungen,12434,9998,944,1473,19,–,–
+Wohnheime,17,12,3,2,–,–,–
+darin: Wohnungen,1009,543,286,180,–,–,–
+Wohngebäude mit Eigentumswohnungen,155,97,8,50,–,–,–
+darin: Wohnungen,3307,2513,155,639,–,–,–
+Nichtwohngebäude,201,86,6,65,1,10,33
+darin: Rauminhalt 1 000 m³,4158,3274,56,619,3,37,169
+Anstaltsgebäude,4,–,–,4,–,–,–
+darin: Rauminhalt 1 000 m³,44,–,–,44,–,–,–
+Büro- und Verwaltungsgebäude,47,30,2,12,1,2,–
+darin: Rauminhalt 1 000 m³,2103,1915,37,145,3,3,–
+landwirtschaftliche Betriebsgebäude,5,–,–,–,–,2,3
+darin: Rauminhalt 1 000 m³,10,–,–,–,–,1,9
+nichtlandwirtschaftliche Betriebsgebäude,86,25,1,25,–,6,29
+darin: Rauminhalt 1 000 m³,1319,928,10,189,–,33,159
+Fabrik- und Werkstattgebäude,19,4,–,10,–,2,3
+darin: Rauminhalt 1 000 m³,253,112,–,100,–,15,25
+Handelsgebäude,12,3,1,5,–,2,1
+darin: Rauminhalt 1 000 m³,143,81,10,39,–,13,1
+Warenlagergebäude,19,3,–,4,–,1,11
+darin: Rauminhalt 1 000 m³,359,297,–,30,–,5,27
+Hotels und Gaststätten,11,7,–,4,–,–,–
+darin: Rauminhalt 1 000 m³,224,214,–,10,–,–,–
+sonstige Nichtwohngebäude,59,31,3,24,–,–,1
+darin: Rauminhalt 1 000 m³,681,431,10,241,–,–,0
+ausgewählte Infrastrukturgebäude,67,31,3,29,–,2,2
+darin: Rauminhalt 1 000 m³,774,431,10,318,–,15,1

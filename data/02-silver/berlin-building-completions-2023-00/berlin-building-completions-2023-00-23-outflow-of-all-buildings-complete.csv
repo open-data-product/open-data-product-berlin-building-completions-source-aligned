@@ -1,0 +1,14 @@
+type,residential_buildings,residential_buildings_apartments,residential_buildings_usage_area,non_residential_buildings,non_residential_buildings_apartments,non_residential_buildings_usage_area
+insgesamt,175,307,32.2,105,37,267.7
+Schaffung öffentlicher Verkehrsflächen,–,–,–,–,–,–
+Schaffung von Freiflächen,4,4,0.5,5,–,10.7
+Errichtung eines neuen Wohngebäudes,158,206,25.3,35,3,108.8
+Errichtung eines neuen Nichtwohngebäudes,3,40,1.5,30,2,79.6
+Bauordnungsrechtliche Unzulässigkeit des Gebäudes,1,1,0.1,–,–,–
+Außergewöhnliches Ereignis (Brand etc.),–,–,–,4,–,28.7
+Nutzungsänderung,9,56,4.9,26,32,33.3
+Nutzungsänderung ganzer Gebäude im  Zuge von Baumaßnahmen,9,56,4.9,26,32,33.3
+Sonstige Gründe,–,–,–,5,–,6.6
+Mitte,5,83,4,11,16,36.1
+Friedrichshain-Kreuzberg,–,–,–,2,2,4.4
+Pankow,37,47,6,13,6,21.4
