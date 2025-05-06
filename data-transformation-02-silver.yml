@@ -1,6 +1,6 @@
 ---
 input_ports:
-  - id: berlin-building-completions-2020-00
+  - id: berlin-building-completions-2020-00-source-aligned
     files:
       - source_file_name: SB_F02-02-00_2020j01_BE.xlsx
         target_file_name: berlin-building-completions-2020-00.xlsx
