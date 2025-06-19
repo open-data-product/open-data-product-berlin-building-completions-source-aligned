@@ -1,2 +1,2 @@
-id
-0
+id,backlog_total,backlog_new_buildings,backlog_new_buildings_under_roof,backlog_new_buildings_not_yet_under_roof,backlog_new_buildings_not_yet_started,expired_building_permits
+0,8820,5256,1509,1842,1905,270
