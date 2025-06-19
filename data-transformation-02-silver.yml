@@ -1,6 +1,6 @@
 ---
 input_ports:
-  - id: berlin-building-completions-2020-00-source-aligned
+  - id: berlin-building-completions-2020-00
     files:
       - source_file_name: SB_F02-02-00_2020j01_BE.xlsx
         target_file_name: berlin-building-completions-2020-00.xlsx
@@ -209,7 +209,7 @@ input_ports:
               - { name: buildings, type: int }
               - { name: usage_area, type: float }
               - { name: apartments, type: int }
-              - { name: living_are, type: float }
+              - { name: living_area, type: float }
               - { name: estimated_costs, type: int }
             skip_rows: 8
             head: 12
@@ -222,7 +222,7 @@ input_ports:
               - { name: volume, type: int }
               - { name: usage_area, type: float }
               - { name: apartments, type: int }
-              - { name: living_are, type: float }
+              - { name: living_area, type: float }
               - { name: estimated_costs, type: int }
             skip_rows: 31
             head: 12
@@ -235,7 +235,7 @@ input_ports:
               - { name: volume, type: int }
               - { name: usage_area, type: float }
               - { name: apartments, type: int }
-              - { name: living_are, type: float }
+              - { name: living_area, type: float }
               - { name: estimated_costs, type: int }
             skip_rows: 8
             head: 12
@@ -248,7 +248,7 @@ input_ports:
               - { name: volume, type: int }
               - { name: usage_area, type: float }
               - { name: apartments, type: int }
-              - { name: living_are, type: float }
+              - { name: living_area, type: float }
               - { name: estimated_costs, type: int }
             skip_rows: 31
             head: 12
@@ -606,7 +606,7 @@ input_ports:
               - { name: buildings, type: int }
               - { name: usage_area, type: float }
               - { name: apartments, type: int }
-              - { name: living_are, type: float }
+              - { name: living_area, type: float }
               - { name: estimated_costs, type: int }
             skip_rows: 8
             head: 12
@@ -619,7 +619,7 @@ input_ports:
               - { name: volume, type: int }
               - { name: usage_area, type: float }
               - { name: apartments, type: int }
-              - { name: living_are, type: float }
+              - { name: living_area, type: float }
               - { name: estimated_costs, type: int }
             skip_rows: 31
             head: 12
@@ -632,7 +632,7 @@ input_ports:
               - { name: volume, type: int }
               - { name: usage_area, type: float }
               - { name: apartments, type: int }
-              - { name: living_are, type: float }
+              - { name: living_area, type: float }
               - { name: estimated_costs, type: int }
             skip_rows: 8
             head: 12
@@ -645,7 +645,7 @@ input_ports:
               - { name: volume, type: int }
               - { name: usage_area, type: float }
               - { name: apartments, type: int }
-              - { name: living_are, type: float }
+              - { name: living_area, type: float }
               - { name: estimated_costs, type: int }
             skip_rows: 31
             head: 12
@@ -1003,7 +1003,7 @@ input_ports:
               - { name: buildings, type: int }
               - { name: usage_area, type: float }
               - { name: apartments, type: int }
-              - { name: living_are, type: float }
+              - { name: living_area, type: float }
               - { name: estimated_costs, type: int }
             skip_rows: 8
             head: 12
@@ -1016,7 +1016,7 @@ input_ports:
               - { name: volume, type: int }
               - { name: usage_area, type: float }
               - { name: apartments, type: int }
-              - { name: living_are, type: float }
+              - { name: living_area, type: float }
               - { name: estimated_costs, type: int }
             skip_rows: 31
             head: 12
@@ -1029,7 +1029,7 @@ input_ports:
               - { name: volume, type: int }
               - { name: usage_area, type: float }
               - { name: apartments, type: int }
-              - { name: living_are, type: float }
+              - { name: living_area, type: float }
               - { name: estimated_costs, type: int }
             skip_rows: 8
             head: 12
@@ -1042,7 +1042,7 @@ input_ports:
               - { name: volume, type: int }
               - { name: usage_area, type: float }
               - { name: apartments, type: int }
-              - { name: living_are, type: float }
+              - { name: living_area, type: float }
               - { name: estimated_costs, type: int }
             skip_rows: 31
             head: 12
@@ -1400,7 +1400,7 @@ input_ports:
               - { name: buildings, type: int }
               - { name: usage_area, type: float }
               - { name: apartments, type: int }
-              - { name: living_are, type: float }
+              - { name: living_area, type: float }
               - { name: estimated_costs, type: int }
             skip_rows: 8
             head: 12
@@ -1413,7 +1413,7 @@ input_ports:
               - { name: volume, type: int }
               - { name: usage_area, type: float }
               - { name: apartments, type: int }
-              - { name: living_are, type: float }
+              - { name: living_area, type: float }
               - { name: estimated_costs, type: int }
             skip_rows: 31
             head: 12
@@ -1426,7 +1426,7 @@ input_ports:
               - { name: volume, type: int }
               - { name: usage_area, type: float }
               - { name: apartments, type: int }
-              - { name: living_are, type: float }
+              - { name: living_area, type: float }
               - { name: estimated_costs, type: int }
             skip_rows: 8
             head: 12
@@ -1439,7 +1439,7 @@ input_ports:
               - { name: volume, type: int }
               - { name: usage_area, type: float }
               - { name: apartments, type: int }
-              - { name: living_are, type: float }
+              - { name: living_area, type: float }
               - { name: estimated_costs, type: int }
             skip_rows: 31
             head: 12
