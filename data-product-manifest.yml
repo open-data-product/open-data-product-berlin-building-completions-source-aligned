@@ -6,7 +6,7 @@ metadata:
   description: Source-aligned data product combining Berlin LOR health and social structure data
   url:
   license:
-  updated: 2025-07-12
+  updated: 2025-07-22
   schema:
     - name: year
       description: year
@@ -274,7 +274,7 @@ output_ports:
       description:
       url: https://github.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/tree/main/data/02-silver/berlin-building-completions-2020-00
       license:
-      updated: 2025-07-12
+      updated: 2025-07-22
       schema:
     files:
       - https://raw.githubusercontent.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/main/data/02-silver/berlin-building-completions-2020-00/berlin-building-completions-2020-00-1-completions-new-buildings.csv
@@ -311,7 +311,7 @@ output_ports:
       description:
       url: https://github.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/tree/main/data/02-silver/berlin-building-completions-2021-00
       license:
-      updated: 2025-07-12
+      updated: 2025-07-22
       schema:
     files:
       - https://raw.githubusercontent.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/main/data/02-silver/berlin-building-completions-2021-00/berlin-building-completions-2021-00-1-completions-new-buildings.csv
@@ -348,7 +348,7 @@ output_ports:
       description:
       url: https://github.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/tree/main/data/02-silver/berlin-building-completions-2022-00
       license:
-      updated: 2025-07-12
+      updated: 2025-07-22
       schema:
     files:
       - https://raw.githubusercontent.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/main/data/02-silver/berlin-building-completions-2022-00/berlin-building-completions-2022-00-1-completions-new-buildings.csv
@@ -385,7 +385,7 @@ output_ports:
       description:
       url: https://github.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/tree/main/data/02-silver/berlin-building-completions-2023-00
       license:
-      updated: 2025-07-12
+      updated: 2025-07-22
       schema:
     files:
       - https://raw.githubusercontent.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/main/data/02-silver/berlin-building-completions-2023-00/berlin-building-completions-2023-00-1-completions-new-buildings.csv
@@ -422,7 +422,7 @@ output_ports:
       description:
       url: https://github.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/tree/main/data/03-gold/berlin-building-completions-2020-00
       license:
-      updated: 2025-07-12
+      updated: 2025-07-22
       schema:
     files:
       - https://raw.githubusercontent.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/main/data/03-gold/berlin-building-completions-2020-00/berlin-building-completions-2020-00-12-completions-including-measures-on-existing-buildings-city.csv
@@ -448,7 +448,7 @@ output_ports:
       description:
       url: https://github.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/tree/main/data/03-gold/berlin-building-completions-2021-00
       license:
-      updated: 2025-07-12
+      updated: 2025-07-22
       schema:
     files:
       - https://raw.githubusercontent.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/main/data/03-gold/berlin-building-completions-2021-00/berlin-building-completions-2021-00-12-completions-including-measures-on-existing-buildings-city.csv
@@ -474,7 +474,7 @@ output_ports:
       description:
       url: https://github.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/tree/main/data/03-gold/berlin-building-completions-2022-00
       license:
-      updated: 2025-07-12
+      updated: 2025-07-22
       schema:
     files:
       - https://raw.githubusercontent.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/main/data/03-gold/berlin-building-completions-2022-00/berlin-building-completions-2022-00-12-completions-including-measures-on-existing-buildings-city.csv
@@ -500,7 +500,7 @@ output_ports:
       description:
       url: https://github.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/tree/main/data/03-gold/berlin-building-completions-2023-00
       license:
-      updated: 2025-07-12
+      updated: 2025-07-22
       schema:
     files:
       - https://raw.githubusercontent.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/main/data/03-gold/berlin-building-completions-2023-00/berlin-building-completions-2023-00-12-completions-including-measures-on-existing-buildings-city.csv

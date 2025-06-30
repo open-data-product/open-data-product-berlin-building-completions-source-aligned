@@ -5,7 +5,7 @@
 
 * owner: Open Data Product
 * description: Source-aligned data product combining Berlin LOR health and social structure data
-* updated: 2025-07-12
+* updated: 2025-07-22
 
 ## Input Ports
 
@@ -66,7 +66,7 @@
 
 * owner: Open Data Product
 * url: https://github.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/tree/main/data/02-silver/berlin-building-completions-2020-00
-* updated: 2025-07-12
+* updated: 2025-07-22
 
 **Files**
 
@@ -102,7 +102,7 @@
 
 * owner: Open Data Product
 * url: https://github.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/tree/main/data/02-silver/berlin-building-completions-2021-00
-* updated: 2025-07-12
+* updated: 2025-07-22
 
 **Files**
 
@@ -138,7 +138,7 @@
 
 * owner: Open Data Product
 * url: https://github.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/tree/main/data/02-silver/berlin-building-completions-2022-00
-* updated: 2025-07-12
+* updated: 2025-07-22
 
 **Files**
 
@@ -174,7 +174,7 @@
 
 * owner: Open Data Product
 * url: https://github.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/tree/main/data/02-silver/berlin-building-completions-2023-00
-* updated: 2025-07-12
+* updated: 2025-07-22
 
 **Files**
 
@@ -210,7 +210,7 @@
 
 * owner: Open Data Product
 * url: https://github.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/tree/main/data/03-gold/berlin-building-completions-2020-00
-* updated: 2025-07-12
+* updated: 2025-07-22
 
 **Files**
 
@@ -235,7 +235,7 @@
 
 * owner: Open Data Product
 * url: https://github.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/tree/main/data/03-gold/berlin-building-completions-2021-00
-* updated: 2025-07-12
+* updated: 2025-07-22
 
 **Files**
 
@@ -260,7 +260,7 @@
 
 * owner: Open Data Product
 * url: https://github.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/tree/main/data/03-gold/berlin-building-completions-2022-00
-* updated: 2025-07-12
+* updated: 2025-07-22
 
 **Files**
 
@@ -285,7 +285,7 @@
 
 * owner: Open Data Product
 * url: https://github.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/tree/main/data/03-gold/berlin-building-completions-2023-00
-* updated: 2025-07-12
+* updated: 2025-07-22
 
 **Files**
 
