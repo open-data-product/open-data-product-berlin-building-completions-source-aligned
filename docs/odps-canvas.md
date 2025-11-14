@@ -1,19 +1,18 @@
 
-# Open Data Product Specification (ODPS) Canvas - Berlin Building Completions source-aligned
+# Open Data Product Specification (ODPS) Canvas - Berlin Building Completions (source-aligned)
 
 * schema version: 3.1
 ## Product
 
 ### Basic Information
 
-* output file formats: csv
 * categories: timeseries
-* description: Data product providing Berlin building completions data
-* logo URL: https://raw.githubusercontent.com/open-data-product/open-data-product-berlin-building-completions-source-aligned/refs/heads/main/logo-with-text.png
+* description: Source-aligned data product combining Berlin LOR health and social structure data
+* logo URL: https://raw.githubusercontent.com/open-data-product/open-data-product-berlin-lor-population-source-aligned/refs/heads/main/logo-with-text.png
 * product ID: berlin-building-completions-source-aligned
 * product series: Berlin Timeseries Series
 * status: active
-* tags: Berlin, building
+* tags: berlin, building, housing
 * type: source-aligned
 * value proposition: Providing Berlin building completions data
 * version: 1.0

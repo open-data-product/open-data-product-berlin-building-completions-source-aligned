@@ -1,0 +1,181 @@
+---
+dataProductDescriptor: data-product-descriptor
+info:
+  fullyQualifiedName: urn:dpds:opendataproduct:dataproducts:berlin-building-completions-source-aligned:1.0
+  name: Berlin Building Completions (source-aligned)
+  version: '1.0'
+  domain: domain
+  owner:
+    id: Open Data product
+    name: Open Data product
+  id: berlin-building-completions-source-aligned
+  entityType:
+  displayName: Berlin Building Completions (source-aligned)
+  description: Source-aligned data product combining Berlin LOR health and social structure data
+  contactPoints:
+interfaceComponents:
+  outputPorts:
+    - promises:
+      expectations:
+      obligations:
+      id: berlin-building-completions-2020-00-csv
+      fullyQualifiedName: berlin-building-completions-2020-00-csv
+      entityType:
+      name: ''
+      version:
+      displayName:
+      description:
+      componentGroup:
+      tags:
+      externalDocs:
+    - promises:
+      expectations:
+      obligations:
+      id: berlin-building-completions-2020-00-parquet
+      fullyQualifiedName: berlin-building-completions-2020-00-parquet
+      entityType:
+      name: ''
+      version:
+      displayName:
+      description:
+      componentGroup:
+      tags:
+      externalDocs:
+    - promises:
+      expectations:
+      obligations:
+      id: berlin-building-completions-2021-00-csv
+      fullyQualifiedName: berlin-building-completions-2021-00-csv
+      entityType:
+      name: ''
+      version:
+      displayName:
+      description:
+      componentGroup:
+      tags:
+      externalDocs:
+    - promises:
+      expectations:
+      obligations:
+      id: berlin-building-completions-2021-00-parquet
+      fullyQualifiedName: berlin-building-completions-2021-00-parquet
+      entityType:
+      name: ''
+      version:
+      displayName:
+      description:
+      componentGroup:
+      tags:
+      externalDocs:
+    - promises:
+      expectations:
+      obligations:
+      id: berlin-building-completions-2022-00-csv
+      fullyQualifiedName: berlin-building-completions-2022-00-csv
+      entityType:
+      name: ''
+      version:
+      displayName:
+      description:
+      componentGroup:
+      tags:
+      externalDocs:
+    - promises:
+      expectations:
+      obligations:
+      id: berlin-building-completions-2022-00-parquet
+      fullyQualifiedName: berlin-building-completions-2022-00-parquet
+      entityType:
+      name: ''
+      version:
+      displayName:
+      description:
+      componentGroup:
+      tags:
+      externalDocs:
+    - promises:
+      expectations:
+      obligations:
+      id: berlin-building-completions-2023-00-csv
+      fullyQualifiedName: berlin-building-completions-2023-00-csv
+      entityType:
+      name: ''
+      version:
+      displayName:
+      description:
+      componentGroup:
+      tags:
+      externalDocs:
+    - promises:
+      expectations:
+      obligations:
+      id: berlin-building-completions-2023-00-parquet
+      fullyQualifiedName: berlin-building-completions-2023-00-parquet
+      entityType:
+      name: ''
+      version:
+      displayName:
+      description:
+      componentGroup:
+      tags:
+      externalDocs:
+  inputPorts:
+    - promises:
+      expectations:
+      obligations:
+      id: berlin-building-completions-2020-00
+      fullyQualifiedName: berlin-building-completions-2020-00
+      entityType:
+      name: ''
+      version:
+      displayName:
+      description:
+      componentGroup:
+      tags:
+      externalDocs:
+    - promises:
+      expectations:
+      obligations:
+      id: berlin-building-completions-2021-00
+      fullyQualifiedName: berlin-building-completions-2021-00
+      entityType:
+      name: ''
+      version:
+      displayName:
+      description:
+      componentGroup:
+      tags:
+      externalDocs:
+    - promises:
+      expectations:
+      obligations:
+      id: berlin-building-completions-2022-00
+      fullyQualifiedName: berlin-building-completions-2022-00
+      entityType:
+      name: ''
+      version:
+      displayName:
+      description:
+      componentGroup:
+      tags:
+      externalDocs:
+    - promises:
+      expectations:
+      obligations:
+      id: berlin-building-completions-2023-00
+      fullyQualifiedName: berlin-building-completions-2023-00
+      entityType:
+      name: ''
+      version:
+      displayName:
+      description:
+      componentGroup:
+      tags:
+      externalDocs:
+  discoveryPorts:
+  observabilityPorts:
+  controlPorts:
+internalComponents:
+components:
+tags:
+externalDocs:
